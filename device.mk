@@ -399,7 +399,6 @@ PRODUCT_PACKAGES += vndk-sp
 # Wifi
 PRODUCT_PACKAGES += \
     android.hardware.wifi@1.0-service \
-    dhcpcd.conf \
     hostapd \
     hostapd_cli \
     libqsap_sdk \
