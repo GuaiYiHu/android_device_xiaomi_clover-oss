@@ -225,6 +225,9 @@ PRODUCT_VENDOR_MOVE_ENABLED := true
 TARGET_SYSTEM_PROP += $(DEVICE_PATH)/system.prop
 TARGET_VENDOR_PROP += $(DEVICE_PATH)/vendor.prop
 
+# Use mke2fs to create ext4 images
+TARGET_USES_MKE2FS := true
+
 # Vendor init
 TARGET_INIT_VENDOR_LIB := libinit_clover
 TARGET_RECOVERY_DEVICE_MODULES := libinit_clover
