@@ -187,7 +187,7 @@ case "$usb_config" in
                               setprop persist.sys.usb.config none
                           fi
 		      ;;
-	              "sdm845")
+	              "sdm845" | "msmpeafowl")
 		          setprop persist.sys.usb.config diag,serial_cdev,rmnet,dpl,adb
 		      ;;
 	              *)
