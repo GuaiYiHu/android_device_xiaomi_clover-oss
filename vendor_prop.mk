@@ -67,6 +67,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
     persist.camera.stats.test=5 \
     persist.camera.HAL3.enabled=1
 
+#Set AudioFlinger client heap size
+PRODUCT_PROPERTY_OVERRIDES += \
+    ro.af.client_heap_size_kbyte=7168
+
 # Debug Options
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.dbg.ims_volte_enable=1 \
