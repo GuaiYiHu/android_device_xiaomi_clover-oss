@@ -239,7 +239,7 @@ if [ -d /config/usb_gadget ]; then
 		setprop sys.usb.controller "a800000.dwc3"
 		echo 15916 > /sys/module/usb_f_qcrndis/parameters/rndis_dl_max_xfer_size
 		;;
-	"sdm845")
+    "sdm845" | "msmpeafowl")
 		setprop sys.usb.controller "a600000.dwc3"
 		setprop sys.usb.rndis.func.name "gsi"
 		setprop sys.usb.rmnet.func.name "gsi"
