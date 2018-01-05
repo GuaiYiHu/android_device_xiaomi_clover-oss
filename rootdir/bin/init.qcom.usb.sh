@@ -208,18 +208,10 @@ esac
 
 # check configfs is mounted or not
 if [ -d /config/usb_gadget ]; then
-	# set USB controller's device node
 	setprop sys.usb.rndis.func.name "rndis_bam"
 	setprop sys.usb.rmnet.func.name "rmnet_bam"
-	setprop sys.usb.rmnet.inst.name "rmnet"
-	setprop sys.usb.dpl.inst.name "dpl"
+	# set USB controller's device node
 	case "$target" in
-	"msm8937")
-		setprop sys.usb.controller "msm_hsusb"
-		setprop sys.usb.rndis.func.name "rndis"
-		setprop sys.usb.rmnet.inst.name "rmnet_bam_dmux"
-		setprop sys.usb.dpl.inst.name "dpl_bam_dmux"
-		;;
 	"msm8953")
 		setprop sys.usb.controller "7000000.dwc3"
 		echo 131072 > /sys/module/usb_f_mtp/parameters/mtp_tx_req_len
@@ -239,7 +231,7 @@ if [ -d /config/usb_gadget ]; then
 		setprop sys.usb.controller "a800000.dwc3"
 		echo 15916 > /sys/module/usb_f_qcrndis/parameters/rndis_dl_max_xfer_size
 		;;
-    "sdm845" | "sdm710" | "msmnile")
+	"sdm845")
 		setprop sys.usb.controller "a600000.dwc3"
 		setprop sys.usb.rndis.func.name "gsi"
 		setprop sys.usb.rmnet.func.name "gsi"
@@ -248,12 +240,15 @@ if [ -d /config/usb_gadget ]; then
 		;;
 	esac
 
-	# Chip-serial is used for unique MSM identification in Product string
-	msm_serial=`cat /sys/devices/soc0/serial_number`;
-	msm_serial_hex=`printf %08X $msm_serial`
-	machine_type=`cat /sys/devices/soc0/machine`
-	product_string="$machine_type-$soc_hwplatform _SN:$msm_serial_hex"
-	echo "$product_string" > /config/usb_gadget/g1/strings/0x409/product
+	product_string=`cat /config/usb_gadget/g1/strings/0x409/product` 2> /dev/null
+	if [ "product_string" == "" ]; then
+		# Chip-serial is used for unique MSM identification in Product string
+		msm_serial=`cat /sys/devices/soc0/serial_number`;
+		msm_serial_hex=`printf %08X $msm_serial`
+		machine_type=`cat /sys/devices/soc0/machine`
+		product_string="$machine_type-$soc_hwplatform _SN:$msm_serial_hex"
+		echo "$product_string" > /config/usb_gadget/g1/strings/0x409/product
+	fi
 
 	# ADB requires valid iSerialNumber; if ro.serialno is missing, use dummy
 	serialnumber=`cat /config/usb_gadget/g1/strings/0x409/serialnumber` 2> /dev/null
