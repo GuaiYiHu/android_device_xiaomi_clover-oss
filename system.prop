@@ -139,7 +139,7 @@ ro.vendor.qti.core_ctl_min_cpu=2
 ro.vendor.qti.core_ctl_max_cpu=4
 
 #Bringup properties
-persist.radio.atfwd.start=true
+persist.vendor.radio.atfwd.start=true
 
 #property to enable VDS WFD solution
 persist.hwc.enable_vds=1
