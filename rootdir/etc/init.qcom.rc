@@ -558,7 +558,7 @@ service vendor.atfwd /vendor/bin/ATFWD-daemon
     group system radio
     disabled
 
-on property:persist.radio.atfwd.start=true
+on property:persist.vendor.radio.atfwd.start=true
     start vendor.atfwd
 
 on property:ro.data.large_tcp_window_size=true
