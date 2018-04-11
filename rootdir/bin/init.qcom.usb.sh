@@ -1,5 +1,5 @@
 #!/vendor/bin/sh
-# Copyright (c) 2012-2017, The Linux Foundation. All rights reserved.
+# Copyright (c) 2012-2018, The Linux Foundation. All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
 # modification, are permitted provided that the following conditions are
@@ -204,8 +204,8 @@ esac
 
 # check configfs is mounted or not
 if [ -d /config/usb_gadget ]; then
-	setprop sys.usb.rndis.func.name "rndis_bam"
-	setprop sys.usb.rmnet.func.name "rmnet_bam"
+	setprop vendor.usb.rndis.func.name "rndis_bam"
+	setprop vendor.usb.rmnet.func.name "rmnet_bam"
 	# set USB controller's device node
 	case "$target" in
 	"msm8937")
@@ -223,8 +223,8 @@ if [ -d /config/usb_gadget ]; then
 		;;
 	"msm8998" | "apq8098_latv")
 		setprop sys.usb.controller "a800000.dwc3"
-		setprop sys.usb.rndis.func.name "gsi"
-		setprop sys.usb.rmnet.func.name "gsi"
+		setprop vendor.usb.rndis.func.name "gsi"
+		setprop vendor.usb.rmnet.func.name "gsi"
 		;;
 	"sdm660")
 		setprop sys.usb.controller "a800000.dwc3"
@@ -232,8 +232,8 @@ if [ -d /config/usb_gadget ]; then
 		;;
 	"sdm845")
 		setprop sys.usb.controller "a600000.dwc3"
-		setprop sys.usb.rndis.func.name "gsi"
-		setprop sys.usb.rmnet.func.name "gsi"
+		setprop vendor.usb.rndis.func.name "gsi"
+		setprop vendor.usb.rmnet.func.name "gsi"
 		;;
 	*)
 		;;
@@ -373,9 +373,9 @@ esac
 #
 # Initialize RNDIS Diag option. If unset, set it to 'none'.
 #
-diag_extra=`getprop persist.sys.usb.config.extra`
+diag_extra=`getprop persist.vendor.usb.config.extra`
 if [ "$diag_extra" == "" ]; then
-	setprop persist.sys.usb.config.extra none
+	setprop persist.vendor.usb.config.extra none
 fi
 
 # soc_ids for 8937
@@ -386,10 +386,10 @@ else
 fi
 
 # enable rps cpus on msm8937 target
-setprop sys.usb.rps_mask 0
+setprop vendor.usb.rps_mask 0
 case "$soc_id" in
 	"294" | "295" | "353" | "354")
-		setprop sys.usb.rps_mask 40
+		setprop vendor.usb.rps_mask 40
 	;;
 esac
 
