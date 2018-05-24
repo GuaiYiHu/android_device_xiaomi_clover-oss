@@ -92,12 +92,7 @@ if [ "$(getprop persist.vendor.usb.config)" == "" -a \
 		  soc_machine=${soc_machine:0:3}
 		  case "$soc_machine" in
 		    "SDA")
-	              # setprop persist.vendor.usb.config diag,adb
-                      if [ -z "$debuggable" -o "$debuggable" = "1" ]; then
-                          setprop persist.vendor.usb.config adb
-                      else
-                          setprop persist.vendor.usb.config none
-                      fi
+	              setprop persist.vendor.usb.config diag,adb
 		    ;;
 		    *)
 	            case "$target" in
@@ -108,14 +103,19 @@ if [ "$(getprop persist.vendor.usb.config)" == "" -a \
 		          setprop persist.vendor.usb.config diag,serial_smd,rmnet_qti_bam,adb
 		      ;;
 	              "msm8937")
-			    case "$soc_id" in
-				    "313" | "320")
-				       setprop persist.vendor.usb.config diag,serial_smd,rmnet_ipa,adb
-				    ;;
-				    *)
-				       setprop persist.vendor.usb.config diag,serial_smd,rmnet_qti_bam,adb
-				    ;;
-			    esac
+			    if [ -d /config/usb_gadget ]; then
+				       setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,adb
+			    else
+			               case "$soc_id" in
+				               "313" | "320")
+						  echo BAM2BAM_IPA > /sys/class/android_usb/android0/f_rndis_qc/rndis_transports
+				                  setprop persist.vendor.usb.config diag,serial_smd,rmnet_ipa,adb
+				               ;;
+				               *)
+				                  setprop persist.vendor.usb.config diag,serial_smd,rmnet_qti_bam,adb
+				               ;;
+			               esac
+			    fi
 		      ;;
 	              "msm8953")
 			      if [ -d /config/usb_gadget ]; then
@@ -125,12 +125,7 @@ if [ "$(getprop persist.vendor.usb.config)" == "" -a \
 			      fi
 		      ;;
 	              "msm8998" | "sdm660" | "apq8098_latv")
-		          # setprop persist.vendor.usb.config diag,serial_cdev,rmnet,adb
-                          if [ -z "$debuggable" -o "$debuggable" = "1" ]; then
-                              setprop persist.vendor.usb.config adb
-                          else
-                              setprop persist.vendor.usb.config none
-                          fi
+		          setprop persist.vendor.usb.config diag,serial_cdev,rmnet,adb
 		      ;;
 	              "sdm845" | "sdm710")
 		          setprop persist.vendor.usb.config diag,serial_cdev,rmnet,dpl,adb
