@@ -1,2 +1,2 @@
-add_lunch_combo omni_whyred-eng
-add_lunch_combo omni_whyred-userdebug
+add_lunch_combo omni_clover-eng
+add_lunch_combo omni_clover-userdebug
