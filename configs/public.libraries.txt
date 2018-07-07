@@ -3,5 +3,6 @@ libadsprpc.so
 libcdsprpc.so
 libsdsprpc.so
 libqvrservice_client.so
-
+libvraudio_client.so
+libqvrcamera_client.so
 libOpenCL.so
