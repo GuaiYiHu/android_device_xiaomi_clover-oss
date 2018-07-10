@@ -30,7 +30,6 @@ import /vendor/etc/init/hw/init.msm.usb.configfs.rc
 import /vendor/etc/init/hw/init.target.rc
 import /vendor/etc/init/hw/init.qcom.factory.rc
 import /vendor/etc/init/hw/init.qcom.test.rc
-import /vendor/etc/init/hw/init.factory.mi.rc
 
 on early-init
     mount debugfs debugfs /sys/kernel/debug
@@ -41,7 +40,6 @@ on early-init
 on init
     # Set permissions for persist partition
     mkdir /persist 0771 root system
-    mkdir /persistbak 0771 root system
 
     # Support legacy paths
     symlink /sdcard /mnt/sdcard
@@ -56,6 +54,7 @@ on init
 
 on post-fs
     chmod 0755 /sys/kernel/debug/tracing
+    insmod /system/lib/modules/exfat.ko
 
 on early-boot
     # set RLIMIT_MEMLOCK to 64MB
@@ -119,12 +118,6 @@ on boot
 
     #Create NETMGR daemon socket area
     mkdir /dev/socket/netmgr 0750 radio radio
-
-    # LED torch permissions
-    chmod 0666 /sys/class/leds/led:torch_0/brightness
-    chmod 0666 /sys/class/leds/led:torch_1/brightness
-    chmod 0666 /sys/class/leds/led:switch_0/brightness
-    chmod 0666 /sys/class/leds/led:switch_1/brightness
 
     setprop wifi.interface wlan0
 
@@ -225,6 +218,19 @@ on boot
 
     # load WIGIG platform driver
     insmod /vendor/lib/modules/msm_11ad_proxy.ko
+        
+    # zhitongze@huaqin.com add sensor hardware info 20180207 begin
+    chmod 0664 /sys/devices/platform/HardwareInfo/gsensor
+    chmod 0664 /sys/devices/platform/HardwareInfo/msensor
+    chmod 0664 /sys/devices/platform/HardwareInfo/alsps
+    chmod 0664 /sys/devices/platform/HardwareInfo/gyro    
+    # zhitongze@huaqin.com add sensor hardware info 20180207 end
+    chown system system /sys/devices/platform/HardwareInfo/alsps
+    chown system system /sys/devices/platform/HardwareInfo/gsensor
+    chown system system /sys/devices/platform/HardwareInfo/msensor
+    chown system system /sys/devices/platform/HardwareInfo/gyro
+    chown system system /sys/devices/platform/HardwareInfo/sar_sensor_1
+    chown system system /sys/devices/platform/HardwareInfo/sar_sensor_2
 
 # msm specific files that need to be created on /data
 on post-fs-data
@@ -304,11 +310,6 @@ on post-fs-data
     mkdir /data/dpm 0771 system system
     chown system system /data/dpm
 
-    # Create the directories used by LctDiagSendData
-    mkdir /data/lct_diag 0771 system system
-    chown system system /data/lct_diag
-    rm /data/lct_diag/client_*
-
     mkdir /data/dpm/nsrm 0771 system system
     chown system system /data/dpm/nsrm
 
@@ -329,8 +330,6 @@ on post-fs-data
     # We chown/chmod /persist again so because mount is run as root + defaults
     chown root system /persist
     chmod 0771 /persist
-    chown root system /persistbak
-    chmod 0771 /persistbak
     chown system system /persist/WCNSS_qcom_wlan_nv.bin
     chmod 0664 /sys/devices/platform/msm_sdcc.1/polling
     chmod 0664 /sys/devices/platform/msm_sdcc.2/polling
@@ -360,16 +359,11 @@ on post-fs-data
     mkdir /data/fota 0771
     chown system system /data/fota
 
-    # SSC/SLPI sensors
-    mkdir /persist/sensors 0775 sensors sensors
-    write /persist/sensors/sensors_settings 1
-    chown system root /persist/sensors/sensors_settings
-    chmod 0664 /persist/sensors/sensors_settings
-    chown system system /persist/PRSensorData.txt
-    chmod 0600 /persist/PRSensorData.txt
-
     #Create directory for hostapd
     mkdir /data/hostapd 0770 system wifi
+
+    # Create /data/time folder for time-services
+    mkdir /data/time/ 0700 system system
 
     mkdir /data/vendor/audio/ 0770 media audio
 
@@ -457,7 +451,10 @@ service qcomsysd /system/vendor/bin/qcom-system-daemon
     disabled
 
 on property:persist.vendor.qcomsysd.enabled=1
-    start qcomsysd
+    enable qcomsysd
+
+on property:persist.vendor.qcomsysd.enabled=0
+    stop qcomsysd
 
 service ssr_setup /system/vendor/bin/ssr_setup
     oneshot
@@ -500,29 +497,11 @@ on property:sys.boot_completed=1
     #WDSP FW boot sysfs node used by STHAL
     chown media audio /sys/kernel/wdsp0/boot
     chown media audio /sys/kernel/wcd_cpe0/fw_name
-    restorecon /sys/tp_selftest/syn_selftest_result
-    chown system system /sys/tp_selftest/syn_selftest_result
-    chmod 0777 /sys/tp_selftest/syn_selftest_result
 
 # corefile limit
 on property:persist.debug.trace=1
     mkdir /data/core 0777 root root
     write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
-
-#zhuxiaomin @ 20170928
-service iwprivftm /system/bin/sh /system/etc/iwpriv.agent.sh
-    oneshot
-    disabled
-on property:persist.sys.iwpriv=1
-    start iwprivftm
-
-#++++>
-on property:sys.ptt_socket_app=1
-    start ptt_ffbm
-
-on property:sys.ftmd=1
-    start ftmd
-#<++++  zhuxiaomin @ 20170928    Add for WiFi & BT FFBM test.
 
 on property:init.svc.wpa_supplicant=stopped
     stop dhcpcd
@@ -553,6 +532,11 @@ on property:bluetooth.startbtlogger=true
 
 on property:bluetooth.startbtlogger=false
     stop bt_logger
+
+service qcom-c_core-sh  /vendor/bin/init.qcom.class_core.sh
+    class core
+    user root
+    oneshot
 
 service qcom-c_main-sh /vendor/bin/init.class_main.sh
     class main
@@ -830,19 +814,28 @@ service iprenew_wigig0 /system/bin/dhcpcd -n
     class late_start
     disabled
     oneshot
-
-service ptt_socket_app /system/vendor/bin/ptt_socket_app -d
+    
+#vendor\qcom\proprietary\wlan\utils\ptt\pttSocketApp.c
+#-d:nodaemon. if use -d, will not run with Daemonize
+#-f:ffbm mode.
+#use disabled:if service start with bootup, aniAsfIpc.c IPC will Bind failed,because Address already use. this is not same to C6?
+service ptt_socket_app /system/vendor/bin/ptt_socket_app -d -v -f 
     class main
     user root
     group root
-    disabled
     oneshot
 
-service ptt_ffbm /system/vendor/bin/ptt_socket_app -f -d
+service ptt_ffbm /system/vendor/bin/ptt_socket_app -f -d -v
     user root
     group root
     disabled
     oneshot
+
+on property:sys.hqftm.load.wifidr=true
+    start ptt_socket_app
+
+on property:sys.hqftm.load.wifidr=false
+    stop ptt_socket_app
 
 service wifi_ftmd /system/vendor/bin/wifi_ftmd
     user system
@@ -852,16 +845,14 @@ service wifi_ftmd /system/vendor/bin/wifi_ftmd
     oneshot
 
 on property:wifi.ftmd.load=true
-    start openwifi
-on property:wifi.ftmd.load=false
-    stop openwifi
+    insmod /system/lib/modules/pronto/pronto_wlan.ko con_mode=5
 
-
-service cnss_diag /system/vendor/bin/cnss_diag -q
+service cnss_diag /system/vendor/bin/cnss_diag -q -f
     class main
     user system
     group system wifi inet net_admin sdcard_rw media_rw diag
     oneshot
+    capabilities NET_ADMIN
 
 service cnss-daemon /system/vendor/bin/cnss-daemon -n -l
     class late_start
@@ -940,11 +931,33 @@ service qcom-sh /vendor/bin/init.qcom.sh
     user root
     oneshot
 
+service sensor-sh /vendor/bin/init.qcom.sensors.sh
+    class core
+    user root
+    oneshot
+
+service crashdata-sh /vendor/bin/init.qcom.crashdata.sh
+    class late_start
+    user root
+    oneshot
+
 service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     class late_start
     user root
     disabled
     oneshot
+
+service wifi-sdio-on /vendor/bin/init.qcom.sdio.sh
+    class late_start
+    group wifi inet
+    disabled
+    oneshot
+
+service wifi-crda /vendor/bin/init.crda.sh
+   class late_start
+   user root
+   disabled
+   oneshot
 
 on property:sys.boot_completed=1
     start qcom-post-boot
@@ -1055,24 +1068,19 @@ on property:sys.qbcharger.enable=true
 on property:sys.qbcharger.enable=false
     stop qbcharger
 
-service diag_mdlog_start /system/vendor/bin/diag_mdlog -n 40
+service diag_mdlog_start /system/vendor/bin/diag_mdlog
     class late_start
     user shell
-    group system diag oem_2901 sdcard_rw sdcard_r media_rw
+    group system oem_2901 sdcard_rw sdcard_r media_rw
     disabled
     oneshot
 
 service diag_mdlog_stop /system/vendor/bin/diag_mdlog -k
     class late_start
     user shell
-    group system diag oem_2901 sdcard_rw sdcard_r media_rw
+    group system oem_2901 sdcard_rw sdcard_r media_rw
     disabled
     oneshot
-
-on property:persist.sys.mdlog.enable=true
-    start diag_mdlog_start
-on property:persist.sys.mdlog.enable=false
-    start diag_mdlog_stop
 
 service qlogd /system/xbin/qlogd
     socket qlogd stream 0662 system system
@@ -1113,24 +1121,6 @@ service vendor.LKCore-dbg /vendor/bin/LKCore
     disabled
     user root
     group root system log diag net_raw
-
-service sdlog /system/bin/sdlog
-    class late_start
-    user root
-    disabled
-    oneshot
-
-on property:sys.logd_t2.enable=1
-    start sdlog
-
-on property:sys.logd.enable=1
-    start sdlog
-
-on property:persist.service.logd.enable=1
-    start sdlog
-on property:persist.service.logd.enable=0
-   setprop vendor.sdlog.run 0
-   stop sdlog
 
 # service for USER
 service vendor.LKCore-rel /vendor/bin/LKCore
@@ -1193,6 +1183,13 @@ service vppservice /vendor/bin/vppservice
     user media
     group camera
 
+service chre /vendor/bin/chre
+    class late_start
+    user system
+    group system
+    socket chre seqpacket 0660 root system
+    shutdown critical
+
 # Set vendor-ril lib path based on Meta version
 on property:vendor.rild.libpath=*
     setprop rild.libpath ${vendor.rild.libpath}
@@ -1202,85 +1199,14 @@ service seemp_healthd /vendor/bin/seemp_healthd
     user system
     group system
 
-# blueduttest service for RF BT test.
-service blueduttest /vendor/bin/sh /vendor/bin/bluedut.sh
-    class late_start
-    user root
-    group root
-    disabled
-    oneshot
-
-# openwifi service for RF wifi test.
-service openwifi /system/bin/sh /vendor/bin/wifitest.sh
-    class late_start
-    user root 
-    disabled
-    oneshot
-
-# closewifi service for RF wifi test.
-service closewifi /system/bin/sh /vendor/bin/wifitest_close.sh
-    class late_start
-    user root 
-    disabled
-    oneshot
-
-#for wifi myftm test
-service myftmftm /vendor/bin/sh /vendor/bin/myftm.agent.sh
-    oneshot
-    disabled
-on property:persist.sys.myftm=1
-    start myftmftm
-    
-#zhufanghua@longcheer.com
-service btclose /vendor/bin/sh /vendor/bin/bt_close.sh
-	user root
-	group root
-	oneshot
-	disabled
-on property:sys.closebt=1
-	start btclose
-
-service wdsdaemon /vendor/bin/wdsdaemon -su
-	user root
-	group root
-	oneshot
-	disabled
-
-on property:sys.start_wdsdaemon=1
-	start wdsdaemon
-
-on property:sys.start_wdsdaemon=0
-	stop wdsdaemon
-
-#lct add runin
-on property:persist.sys.runin=enable
-    write /sys/class/power_supply/battery/device/BatteryTestStatus 1
-
-on property:persist.sys.runin=disable
-    write /sys/class/power_supply/battery/device/BatteryTestStatus 0
-
-#lct add phone call status
-on property:sys.thermal.isincall=1
-    write /sys/class/power_supply/battery/device/thermalcall 1
-
-on property:sys.thermal.isincall=0
-    write /sys/class/power_supply/battery/device/thermalcall 0
-    
-#Add command for PA test begin
-service LctDiagSendData /vendor/bin/LctDiagSendData
-    class core
-    user root
-    oneshot
-    disabled
-#on property:persist.sys.lctdiagsenddata=1
-#    start LctDiagSendData
-#on property:persist.sys.lctdiagsenddata=0
-#    stop LctDiagSendData
-on property:ro.runtime.firstboot=*
-    start LctDiagSendData
-#Add command for PA test end
 service power_off_alarm /vendor/bin/power_off_alarm
     class core
     group system
     disabled
     oneshot
+
+service bugreport /system/bin/dumpstate -d -p -B -z -o /data/user_de/0/com.android.shell/files/bugreports/bugreport
+    class main
+    disabled
+    oneshot
+    keycodes 114 115 116

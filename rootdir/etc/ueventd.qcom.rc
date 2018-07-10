@@ -48,7 +48,6 @@
 /dev/ipaNatTable          0660   radio      radio
 /dev/rmnet_ctrl           0660   usb        usb
 /dev/dpl_ctrl             0660   usb        usb
-/dev/spidev7.1            0660  system 	    system
 
 #permissions for CSVT
 /dev/smd11                0660   radio      radio
@@ -136,13 +135,6 @@
 /dev/adsprpc-smd          0664   system     system
 /dev/system_health_monitor 0644  radio      system
 /dev/mdss_rotator         0664   system     system
-
-# fpc fingerprint
-/sys/devices/soc/soc:fpc1020*   hw_reset 0660 system system
-/sys/devices/soc/soc:fpc1020*   irq 0660 system system
-/sys/devices/soc/soc:fpc1020*   wakeup_enable 0660 system system
-/sys/devices/soc/soc:fpc1020*    fingerdown_wait 0220 system system
-
 # wlan
 /dev/wcnss_wlan           0660   system     system
 /dev/wcnss_ctrl           0660   system     system
@@ -297,6 +289,9 @@
 /dev/block/platform/soc/1da4000.ufshc/by-name/frp       0600   system     system
 /dev/block/platform/soc/c0c4000.sdhci/by-name/frp       0600   system     system
 /dev/block/platform/soc/1d84000.ufshc/by-name/frp       0600   system     system
+
+# Add device block for FRP with soc.0
+/dev/block/platform/soc.0/7824900.sdhci/by-name/config    0600   system     system
 
 # Kmsg device
 /dev/kmsg                                               0620   root       system
