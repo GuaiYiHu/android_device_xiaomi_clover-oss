@@ -14,13 +14,16 @@ vendor/lib64/libfastcvopt.so
 vendor/lib64/libmdsprpc.so
 
 # ADSP modules
+vendor/lib/rfsa/adsp/dirac_resource_d9p.dar
 vendor/lib/rfsa/adsp/dirac_resource.dar
 vendor/lib/rfsa/adsp/libadsp_fd_skel.so
 vendor/lib/rfsa/adsp/libadsp_hvx_add_constant.so
 vendor/lib/rfsa/adsp/libadsp_hvx_skel.so
 vendor/lib/rfsa/adsp/libapps_mem_heap.so
 vendor/lib/rfsa/adsp/libdirac-capiv2.so
+vendor/lib/rfsa/adsp/libdirac_capiv2ext.so
 vendor/lib/rfsa/adsp/libdspCV_skel.so
+vendor/lib/rfsa/adsp/libedge_smooth_skel.so
 vendor/lib/rfsa/adsp/libfastcvadsp_skel.so
 vendor/lib/rfsa/adsp/libfastcvadsp.so
 vendor/lib/rfsa/adsp/libFastRPC_AUE_Forward_skel.so
@@ -45,15 +48,12 @@ lib64/libaptXHD_encoder.so|90f47f10af28b3ead143200cb4370b847c513127
 
 # Audio
 vendor/bin/audioflacapp
-vendor/bin/capture_audio.sh
 vendor/etc/drc/drc_cfg_5.1.txt
 vendor/etc/drc/drc_cfg_AZ.txt
 vendor/etc/surround_sound_3mic/surround_sound_rec_5.1.cfg
 vendor/etc/surround_sound_3mic/surround_sound_rec_AZ.cfg
-vendor/firmware/dbmd4_va_fw.bin
-vendor/firmware/tas2557_uCDSP.bin
-vendor/firmware/tfa98xx.cnt
-vendor/firmware/voice_amodel.bin
+vendor/firmware/tas2557s_uCDSP_d9p.bin
+vendor/firmware/tas2557s_uCDSP.bin
 vendor/lib/libacdb-fts.so
 vendor/lib/libacdbmapper.so
 vendor/lib/libacdbloader.so
@@ -106,38 +106,25 @@ vendor/etc/init/android.hardware.bluetooth@1.0-service-qti.rc
 vendor/lib/hw/android.hardware.bluetooth@1.0-impl-qti.so
 vendor/lib/libbt-hidlclient.so
 vendor/lib/libbtnv.so
+vendor/lib/vendor.qti.hardware.fm@1.0_vendor.so
 vendor/lib64/hw/android.hardware.bluetooth@1.0-impl-qti.so
 vendor/lib64/libbt-hidlclient.so
 vendor/lib64/libbtnv.so
+vendor/lib64/vendor.qti.hardware.fm@1.0_vendor.so
 
 # Camera
 bin/mm-qcamera-daemon
 lib/libtrueportrait.so
 lib64/libtrueportrait.so
-vendor/etc/camera/age_gender_bg
 vendor/etc/camera/camera_config.xml
-vendor/etc/camera/crown_156_128.bin
 vendor/etc/camera/csidtg_camera.xml
 vendor/etc/camera/csidtg_chromatix.xml
-vendor/etc/camera/dualcamera.png
-vendor/etc/camera/dualcamera_in.png
-vendor/etc/camera/face_goodly_208_180
-vendor/etc/camera/face_ravishing_238_224
-vendor/etc/camera/face_splendid_274_200
-vendor/etc/camera/female_bg.png
-vendor/etc/camera/female_icon.png
 vendor/etc/camera/lf_facerank_model.bin
-vendor/etc/camera/male_bg.png
-vendor/etc/camera/male_icon.png
-vendor/etc/camera/Miui-Light.ttf
-vendor/etc/camera/MIUI_Time.ttf
-vendor/etc/camera/morpho_lowlight4.0.xml
-vendor/etc/camera/people_gender.dat
-vendor/etc/camera/score_bg.png
-vendor/etc/camera/score_icon.png
+vendor/etc/camera/ov13855_chromatix.xml
+vendor/etc/camera/ov13855_f13v10l_chromatix.xml
+vendor/etc/camera/s5k3p8sp_chromatix.xml
+vendor/etc/camera/s5k5e8_chromatix.xml
 vendor/etc/camera/sdm_ys_32p_120_21_5_perturb50.bin
-vendor/etc/camera/watermark_font_2300_3199.dat
-vendor/etc/camera/yuv_test.xml
 vendor/etc/qvr/qvrservice_6dof_config.xml
 vendor/etc/qvr/ov7251_640x480_cam_config.xml
 vendor/etc/qvr/ov9282_stereo_2560x800_cam_config.xml
@@ -145,34 +132,22 @@ vendor/etc/qvr/qvrservice_config.txt
 vendor/etc/qvr/qvrservice_6dof_config_stereo.xml
 vendor/etc/qvr/ov9282_stereo_1280x400_cam_config.xml
 vendor/lib/hw/camera.sdm660.so
-vendor/lib/libMiCameraHal.so
-vendor/lib/libmicamera.ic.so
 vendor/lib/libmmcamera_interface.so
 vendor/lib/libmmjpeg_interface.so
 vendor/lib/libqomx_core.so
-vendor/lib/lib_lowlight.so
-vendor/lib/libarcsoft_portrait_editing.so
-vendor/lib/libarcsoft_beautyshot_exin.so
-vendor/lib/libarcsoft_beauty_shot.so
 vendor/lib/libarcsoft_beautyshot.so
-vendor/lib/libarcsoft_dualcam_refocus.so
 vendor/lib/libarcsoft_high_dynamic_range.so
-vendor/lib/libcamera_scene.so
 vendor/lib/libcdsprpc.so
 vendor/lib/libchromaflash.so
 vendor/lib/libdepthmapwrapper.so
 vendor/lib/libdualcameraddm.so
 vendor/lib/libFaceGrade.so
-vendor/lib/libfit_face_beauty.so
 vendor/lib/libflash_pmic.so
-vendor/lib/libgnustl_shared.so
 vendor/lib/libhal_dbg.so
 vendor/lib/libhdr_tm.so
 vendor/lib/libjpegdhw.so
 vendor/lib/libjpegdmahw.so
 vendor/lib/libjpegehw.so
-vendor/lib/libmibokeh_636.so
-vendor/lib/libMiWatermark.so
 vendor/lib/libmm-qcamera.so
 vendor/lib/libmmlib2d_interface.so
 vendor/lib/libmmcamera_chromaflash_lib.so
@@ -224,7 +199,6 @@ vendor/lib/libmmcamera2_stats_modules.so
 vendor/lib/libmmjpeg.so
 vendor/lib/libmmqjpeg_codec.so
 vendor/lib/libmmqjpegdma.so
-vendor/lib/libmorphohht4.0.so
 vendor/lib/libmpbase.so
 vendor/lib/liboptizoom.so
 vendor/lib/libqomx_jpegdec.so
@@ -245,20 +219,12 @@ vendor/lib/libscveObjectTracker_stub.so
 vendor/lib/libscvePanorama.so
 vendor/lib/libscvePanorama_lite.so
 vendor/lib/libseemore.so
-vendor/lib/libSNPE.so
-vendor/lib/libsymphony-cpu.so
-vendor/lib/libsymphonypower.so
 vendor/lib/libts_detected_face_hal.so
 vendor/lib/libts_face_beautify_hal.so
 vendor/lib/libubifocus.so
-vendor/lib/libVDClearShot.so
-vendor/lib/libVDSuperPhotoAPI.so
 vendor/lib/libvideobokeh.so
 vendor/lib/libvideoutils.so
-vendor/lib/libvidhance.so
-vendor/lib/libvidhance_gyro.so
 vendor/lib/libXMFD_AgeGender.so
-vendor/lib/mibokeh_636_opencl.bin
 vendor/lib64/libcdsprpc.so
 vendor/lib64/libchromaflash.so
 vendor/lib64/libdualcameraddm.so
@@ -295,6 +261,7 @@ vendor/lib64/libvideobokeh.so
 vendor/lib64/libvideoutils.so
 
 # Camera actuators
+vendor/lib/libactuator_bu64297_f13v10l.so
 vendor/lib/libactuator_rohm_bu64243gwz.so
 
 # Camera chromatix
@@ -303,6 +270,75 @@ vendor/lib/libchromatix_csidtg_cpp_preview.so
 vendor/lib/libchromatix_csidtg_postproc.so
 vendor/lib/libchromatix_csidtg_preview.so
 vendor/lib/libchromatix_csidtg_zsl_preview.so
+vendor/lib/libchromatix_ov13855_zsl_video_bu64297.so
+vendor/lib/libchromatix_ov13855_cpp_ds_chromatix_video_call.so
+vendor/lib/libchromatix_ov13855_zsl_preview_bu64297_video_call.so
+vendor/lib/libchromatix_ov13855_default_preview_bu64297_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_ds_chromatix.so
+vendor/lib/libmmcamera_ov13855_f13v10l.so
+vendor/lib/libchromatix_ov13855_hfr_120_bu64297.so
+vendor/lib/libchromatix_ov13855_default_video_bu64297_video_call.so
+vendor/lib/libchromatix_ov13855_hfr_120.so
+vendor/lib/libchromatix_ov13855_zsl_preview_bu64297.so
+vendor/lib/libchromatix_ov13855_default_video_video_call.so
+vendor/lib/libmmcamera_qtech_ov13855_eeprom.so
+vendor/lib/libchromatix_ov13855_cpp_video_full.so
+vendor/lib/libchromatix_ov13855_cpp_hfr_60.so
+vendor/lib/libchromatix_ov13855_hfr_90.so
+vendor/lib/libchromatix_ov13855_snapshot.so
+vendor/lib/libchromatix_ov13855_cpp_hfr_90.so
+vendor/lib/libchromatix_ov13855_preview.so
+vendor/lib/libchromatix_ov13855_cpp_us_chromatix_video_call.so
+vendor/lib/libchromatix_ov13855_zsl_video_bu64297_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_preview.so
+vendor/lib/libchromatix_ov13855_hfr_90_bu64297.so
+vendor/lib/libchromatix_ov13855_default_video.so
+vendor/lib/libchromatix_ov13855_hfr_60_bu64297.so
+vendor/lib/libchromatix_ov13855_default_preview_bu64297.so
+vendor/lib/libchromatix_ov13855_cpp_liveshot_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_video.so
+vendor/lib/libchromatix_ov13855_cpp_hfr_120.so
+vendor/lib/libchromatix_ov13855_postproc.so
+vendor/lib/libchromatix_ov13855_common.so
+vendor/lib/libchromatix_ov13855_cpp_video_video_call.so
+vendor/lib/libchromatix_ov13855_hfr_60.so
+vendor/lib/libchromatix_ov13855_video_full_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_us_chromatix.so
+vendor/lib/libchromatix_ov13855_preview_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_preview_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_snapshot.so
+vendor/lib/libchromatix_ov13855_video_full.so
+vendor/lib/libchromatix_ov13855_cpp_video_full_video_call.so
+vendor/lib/libchromatix_ov13855_snapshot_video_call.so
+vendor/lib/libchromatix_ov13855_cpp_liveshot.so
+vendor/lib/libchromatix_ov13855_cpp_snapshot_video_call.so
+vendor/lib/libchromatix_ov13855_default_video_bu64297.so
+vendor/lib/libchromatix_ov13855_liveshot.so
+vendor/lib/libchromatix_ov13855_liveshot_video_call.so
+vendor/lib/libchromatix_s5k5e8_cpp_preview_video_call.so
+vendor/lib/libchromatix_s5k5e8_cpp_snapshot_video_call.so
+vendor/lib/libchromatix_s5k5e8_video.so
+vendor/lib/libchromatix_s5k5e8_a3_zsl_video.so
+vendor/lib/libchromatix_s5k5e8_cpp_snapshot.so
+vendor/lib/libchromatix_s5k5e8_postproc.so
+vendor/lib/libchromatix_s5k5e8_cpp_liveshot_video_call.so
+vendor/lib/libchromatix_s5k5e8_a3_zsl_preview_video_call.so
+vendor/lib/libchromatix_s5k5e8_a3_zsl_preview.so
+vendor/lib/libchromatix_s5k5e8_cpp_preview.so
+vendor/lib/libchromatix_s5k5e8_video_video_call.so
+vendor/lib/libchromatix_s5k5e8_snapshot.so
+vendor/lib/libmmcamera_s5k5e8.so
+vendor/lib/libchromatix_s5k5e8_common.so
+vendor/lib/libchromatix_s5k5e8_cpp_video.so
+vendor/lib/libchromatix_s5k5e8_cpp_liveshot.so
+vendor/lib/libmmcamera_qtech_s5k5e8_eeprom.so
+vendor/lib/libchromatix_s5k5e8_cpp_video_video_call.so
+vendor/lib/libchromatix_s5k5e8_cpp_snapshot_4m.so
+vendor/lib/libchromatix_s5k5e8_preview.so
+vendor/lib/libchromatix_s5k5e8_a3_zsl_video_video_call.so
+vendor/lib/libchromatix_s5k5e8_preview_video_call.so
+vendor/lib/libchromatix_s5k5e8_snapshot_video_call.so
+vendor/lib/libchromatix_s5k5e8_cpp_snapshot_4m_video_call.so
 
 # Camera firmware
 vendor/firmware/cpp_firmware_v1_1_1.fw
@@ -322,7 +358,6 @@ vendor/lib/libois_bu63165.so
 vendor/lib/libois_lc898122.so
 
 # Camera sensors
-vendor/lib/libmmcamera_arcsoftbokeh_lib.so
 vendor/lib/libmmcamera_bokeh.so
 vendor/lib/libmmcamera_csidtg.so
 vendor/lib/libmmcamera_depth_map.so
@@ -434,11 +469,6 @@ vendor/lib64/libwqe.so
 vendor/lib64/libxml.so
 vendor/lib64/vendor.qti.hardware.data.latency@1.0_vendor.so
 
-# Consumerir
-vendor/bin/consumerird
-vendor/lib/hw/consumerir.default.so
-vendor/lib64/hw/consumerir.default.so
-
 # Display calibration
 etc/permissions/com.qti.snapdragon.sdk.display.xml
 -framework/com.qti.snapdragon.sdk.display.jar
@@ -457,9 +487,7 @@ vendor/bin/hw/vendor.display.color@1.0-service
 vendor/bin/hw/vendor.qti.hardware.qdutils_disp@1.0-service-qti
 vendor/etc/init/vendor.display.color@1.0-service.rc
 vendor/etc/init/vendor.qti.hardware.qdutils_disp@1.0-service-qti.rc
-vendor/etc/qdcm_calib_data_shenchao_td4310_fhd_video_mode_dsi_panel.xml
-vendor/etc/qdcm_calib_data_tianma_nt36672_fhd_video_mode_dsi_panel.xml
-vendor/etc/qdcm_calib_data_tianma_td4310_fhd_video_mode_dsi_panel.xml
+vendor/etc/qdcm_calib_data_NT51021_BOE_BOE.xml
 vendor/lib/libsdm-color.so
 vendor/lib/libsdm-diag.so
 vendor/lib/libsdmextension.so
@@ -604,66 +632,13 @@ vendor/lib64/libFidoCrypto_vendor.so
 vendor/lib/libFIDOKeyProvisioning.so
 vendor/lib64/libFIDOKeyProvisioning.so
 
-# Fingerprint firmware
-etc/firmware/goodixfp.b00
-etc/firmware/goodixfp.b01
-etc/firmware/goodixfp.b02
-etc/firmware/goodixfp.b03
-etc/firmware/goodixfp.b04
-etc/firmware/goodixfp.b05
-etc/firmware/goodixfp.b06
-etc/firmware/goodixfp.b07
-etc/firmware/goodixfp.mdt
-vendor/firmware/fpctzappfingerprint.b00
-vendor/firmware/fpctzappfingerprint.b01
-vendor/firmware/fpctzappfingerprint.b02
-vendor/firmware/fpctzappfingerprint.b03
-vendor/firmware/fpctzappfingerprint.b04
-vendor/firmware/fpctzappfingerprint.b05
-vendor/firmware/fpctzappfingerprint.b06
-vendor/firmware/fpctzappfingerprint.b07
-vendor/firmware/fpctzappfingerprint.mdt
-
-# Fingerprint sensor
--vendor/app/FingerprintExtensionService/FingerprintExtensionService.apk
--vendor/app/QFingerprintService/QFingerprintService.apk
-vendor/bin/qfp-daemon
-vendor/bin/hw/android.hardware.biometrics.fingerprint@2.1-service
-vendor/etc/init/android.hardware.biometrics.fingerprint@2.1-service.rc
-vendor/etc/permissions/com.fingerprints.extension.xml
-vendor/framework/com.fingerprints.extension.jar
-vendor/lib/hw/fingerprint.goodix.default.so
-vendor/lib/vendor.qti.hardware.fingerprint@1.0.so
-vendor/lib64/hw/fingerprint.default.so
-vendor/lib64/hw/fingerprint.fpc.default.so
-vendor/lib64/hw/fingerprint.goodix.default.so
-vendor/lib64/com.fingerprints.extension@1.0.so
-vendor/lib64/libgoodixfingerprintd_binder.so
-vendor/lib64/libgf_ca.so
-vendor/lib64/libgf_hal.so
-vendor/lib64/libqfp-service.so
-vendor/lib64/libvendor.goodix.hardware.fingerprint@1.0-service.so
-vendor/lib64/libvendor.goodix.hardware.fingerprint@1.0.so
-vendor/lib64/vendor.qti.hardware.fingerprint@1.0.so
-
-# FM
-bin/fmconfig
-lib/libfm-hci.so
-lib/fm_helium.so
-lib64/libfm-hci.so
-lib64/fm_helium.so
-vendor/bin/ftmdaemon
-vendor/bin/fm_qsoc_patches
--lib/vendor.qti.hardware.fm@1.0.so
--lib64/vendor.qti.hardware.fm@1.0.so
-vendor/lib/hw/vendor.qti.hardware.fm@1.0-impl.so
-vendor/lib/vendor.qti.hardware.fm@1.0_vendor.so
-vendor/lib64/hw/vendor.qti.hardware.fm@1.0-impl.so
-vendor/lib64/vendor.qti.hardware.fm@1.0_vendor.so
-
 # Gatekeeper
+vendor/bin/hw/android.hardware.gatekeeper@1.0-service-qti
+vendor/etc/init/android.hardware.gatekeeper@1.0-service-qti.rc
 vendor/lib/hw/gatekeeper.sdm660.so
+vendor/lib/hw/android.hardware.gatekeeper@1.0-impl-qti.so
 vendor/lib64/hw/gatekeeper.sdm660.so
+vendor/lib64/hw/android.hardware.gatekeeper@1.0-impl-qti.so
 
 # GPS
 etc/permissions/com.qti.location.sdk.xml
@@ -749,16 +724,6 @@ vendor/firmware/a330_pfp.fw
 vendor/firmware/a330_pm4.fw
 vendor/firmware/a420_pfp.fw
 vendor/firmware/a420_pm4.fw
-vendor/firmware/a508_zap.b00
-vendor/firmware/a508_zap.b01
-vendor/firmware/a508_zap.b02
-vendor/firmware/a508_zap.elf
-vendor/firmware/a508_zap.mdt
-vendor/firmware/a512_zap.b00
-vendor/firmware/a512_zap.b01
-vendor/firmware/a512_zap.b02
-vendor/firmware/a512_zap.elf
-vendor/firmware/a512_zap.mdt
 vendor/firmware/a530_gpmu.fw2
 vendor/firmware/a530_pfp.fw
 vendor/firmware/a530_pm4.fw
@@ -842,8 +807,12 @@ vendor/lib64/libkeymasterprovision.so
 vendor/lib64/libkeymasterdeviceutils.so
 
 # Keystore
+vendor/bin/hw/android.hardware.keymaster@3.0-service-qti
+vendor/etc/init/android.hardware.keymaster@3.0-service-qti.rc
 vendor/lib/hw/keystore.sdm660.so
+vendor/lib/hw/android.hardware.keymaster@3.0-impl-qti.so
 vendor/lib64/hw/keystore.sdm660.so
+vendor/lib64/hw/android.hardware.keymaster@3.0-impl-qti.so
 
 # Listen
 vendor/lib/hw/sound_trigger.primary.sdm660.so
@@ -947,7 +916,6 @@ vendor/lib/libqti-util.so
 vendor/lib/libqti-utils.so
 vendor/lib/libqti-gt-prop.so
 vendor/lib/libqti-iopd-client.so
-vendor/lib/libqti-iopd.so
 vendor/lib/hw/vendor.qti.hardware.iop@1.0-impl.so
 vendor/lib/vendor.qti.hardware.perf@1.0_vendor.so
 vendor/lib/vendor.qti.hardware.iop@1.0_vendor.so
@@ -962,7 +930,6 @@ vendor/lib64/libqti-util.so
 vendor/lib64/libqti-utils.so
 vendor/lib64/libqti-gt-prop.so
 vendor/lib64/libqti-iopd-client.so
-vendor/lib64/libqti-iopd.so
 vendor/lib64/hw/vendor.qti.hardware.iop@1.0-impl.so
 vendor/lib64/vendor.qti.hardware.perf@1.0_vendor.so
 vendor/lib64/vendor.qti.hardware.iop@1.0_vendor.so
@@ -978,7 +945,6 @@ vendor/lib/libperipheral_client.so
 vendor/lib64/libperipheral_client.so
 
 # Postprocessing
-etc/calib.cfg
 vendor/bin/mm-pp-dpps
 vendor/lib/libdisp-aba.so
 vendor/lib64/libdisp-aba.so
@@ -1042,7 +1008,6 @@ vendor/bin/rmt_storage
 vendor/bin/tftp_server
 vendor/etc/data/dsi_config.xml
 vendor/etc/data/netmgr_config.xml
-vendor/Diag.cfg
 etc/permissions/embms.xml
 etc/permissions/qcrilhook.xml
 etc/permissions/telephonyservice.xml
@@ -1193,6 +1158,8 @@ vendor/lib/libsensor1.so
 vendor/lib/sensor_calibrate.so
 vendor/lib/sensors.ssc.so
 vendor/lib/vendor.qti.hardware.sensorscalibrate@1.0.so
+vendor/lib64/hw/sensors.sdm660.so
+vendor/lib64/hw/sensors.sda660.so
 vendor/lib64/hw/activity_recognition.sdm660.so
 vendor/lib64/libsensor_reg.so
 vendor/lib64/libsensor1.so
@@ -1201,11 +1168,6 @@ vendor/lib64/sensors.ssc.so
 vendor/lib64/vendor.qti.hardware.sensorscalibrate@1.0.so
 
 # Signed graphics firmware
-vendor/firmware/a512_zap.b00
-vendor/firmware/a512_zap.b01
-vendor/firmware/a512_zap.b02
-vendor/firmware/a512_zap.elf
-vendor/firmware/a512_zap.mdt
 vendor/firmware/a530_gpmu.fw2
 vendor/firmware/a530_pfp.fw
 vendor/firmware/a530_pm4.fw
@@ -1217,13 +1179,11 @@ vendor/bin/ssr_setup
 # Thermal
 vendor/etc/thermal-engine.conf
 vendor/etc/thermal-engine-map.conf
-vendor/etc/thermal-engine-sgame.conf
 vendor/bin/thermal-engine
-vendor/lib/libthermalfeature.so
 -vendor/lib/libthermalclient.so
-vendor/lib64/libthermalfeature.so
 -vendor/lib64/libthermalclient.so
 vendor/lib64/libthermalioctl.so
+vendor/lib64/libthermalfeature.so
 
 # Time services
 -vendor/app/TimeService/TimeService.apk
