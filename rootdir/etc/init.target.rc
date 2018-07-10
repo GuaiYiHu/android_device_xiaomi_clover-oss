@@ -41,15 +41,6 @@ on init
     write /dev/stune/foreground/schedtune.colocate 0
     write /dev/stune/top-app/schedtune.colocate 1
 
-    mkdir /cust 0771 system system
-
-    # Add a cpuset for the camera daemon
-    mkdir /dev/cpuset/camera-daemon 0750 cameraserver cameraserver
-    write /dev/cpuset/camera-daemon/cpus 0-7
-    write /dev/cpuset/camera-daemon/mems 0
-    chown cameraserver cameraserver /dev/cpuset/camera-daemon/tasks
-    chmod 0660 /dev/cpuset/camera-daemon/tasks
-
 on fs
     wait /dev/block/platform/soc/${ro.boot.bootdevice}
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
@@ -60,33 +51,21 @@ on fs
     # these partition flashed on the device. Failure to mount any partition in fstab file
     # results in failure to launch late-start class.
 
-    mkdir /persist/data 0700 system system
-    mkdir /persist/bms 0700 root system
-    restorecon_recursive /persist
-
-    restorecon_recursive /persistbak
-
-
+    #wait /dev/block/bootdevice/by-name/persist
+    #mount ext4 /dev/block/bootdevice/by-name/persist /persist nosuid nodev noatime barrier=1
+    #mkdir /persist/data 0700 system system
+    #mkdir /persist/bms 0700 root system
+    #restorecon_recursive /persist
     write /sys/kernel/boot_adsp/boot 1
-    chown system system /dev/goodix_fp
-    #chmod 0644 /dev/goodix_fp
-
-    chmod 0664 /sys/class/thermal/thermal_message/sconfig
-    chown system system /sys/class/thermal/thermal_message/sconfig
 
 on post-fs
+    restorecon_recursive /persist
+    exec - root root -- /vendor/bin/init.huaqin.persist.sh
     start qseecomd
     exec - system system -- /vendor/bin/init.qti.qseecomd.sh
     write /dev/ipa 1
-
-    # We chown/chmod /cust again so because mount is run as root + defaults
-    chown system system /cust
-    chmod 0771 /cust
-    # We restorecon /cust in case the cust partition has been reset.
-    restorecon_recursive /cust
-
-    # create the lost+found directories, so as to enforce our permissions
-    mkdir /cust/lost+found 0770 root root
+    # Update dm-verity state and set partition.*.verified properties
+    verity_update_state
 
 on init
     write /sys/module/qpnp_rtc/parameters/poweron_alarm 1
@@ -100,13 +79,23 @@ on post-fs-data
     mkdir /persist/qti_fp 0700 system system
     mkdir /data/misc/seemp 0700 system system
     mkdir /data/misc/tloc 0700 system drmrpc
-    start pa-cal-load
+    mkdir /persist/data 0700 system system
+    mkdir /persist/bms 0700 root system
+    mkdir /data/thermal 0771 system system
+    mkdir /data/thermal/config 0771 system system
+    chmod 0664 /sys/class/thermal/thermal_message/sconfig
+    chown system system /sys/class/thermal/thermal_message/sconfig
+#wangtao 20180227 add battery permission
+    chmod 0644 /sys/class/power_supply/battery/charging_enabled
+    chmod 0644 /sys/class/power_supply/battery/constant_charge_current_max
+    restorecon_recursive /persist
 
 on boot
     start rmt_storage
     start rfs_access
     write /dev/cpuset/top-app/cpus 0-7
     write /dev/cpuset/foreground/cpus 0-7
+    write /dev/cpuset/foreground/boost/cpus 0-7
     write /dev/cpuset/background/cpus 0-7
     write /dev/cpuset/system-background/cpus 0-7
     ####Regionalization config and prop files####
@@ -126,17 +115,31 @@ on boot
     chown system system /persist/speccfg/vendor_persist.prop
     chown system system /persist/speccfg/submask
     chown system system /persist/speccfg/partition
-
-    # Touchscreen
-    chown system system /sys/class/input/input2/wake_gesture
-
+    # wangtao open led permisions start
+    chown system system /sys/class/leds/red/blink
+    # wangtao open led permisions end
+    # wendell-20180423 added for fpc fingerprint
+    chown system system /sys/devices/soc/soc:fpc1020/compatible_all
+    chmod 0664 /sys/devices/soc/soc:fpc1020/compatible_all
+    chown system system /sys/devices/soc/soc:fpc1020/irq
+    chmod 0660 /sys/devices/soc/soc:fpc1020/irq
+    chown system system /sys/devices/soc/soc:fpc1020/hw_reset
+    chmod 0660 /sys/devices/platform/soc/soc:fpc1020/hw_reset
+    chown system system /sys/devices/soc/soc:fpc1020/wakeup_enable
+    chmod 0660 /sys/devices/soc/soc:fpc1020/wakeup_enable
+    # wendell-20180423 end
+    start getpersistlog
+    #Load WLAN driver
+    insmod /vendor/lib/modules/qca_cld3/qca_cld3_wlan.ko
+    setprop wlan.driver.status "ok"
     # Wifi firmware reload path
     chown wifi wifi /sys/module/wlan/parameters/fwpath
 
 #Peripheral manager
 service per_mgr /system/vendor/bin/pm-service
     class core
-    user root
+    user system
+    group system
     ioprio rt 4
 
 service per_proxy /system/vendor/bin/pm-proxy
@@ -168,6 +171,7 @@ on property:sys.shutdown.requested=*
 #on property:persist.usb.chgdisabled=0
 #    write /sys/class/power_supply/battery/charging_enabled 1
 #
+
 #service qrngd /system/bin/qrngd -f
 #   class main
 #   user root
@@ -194,7 +198,7 @@ service qseecomd /vendor/bin/qseecomd
 #
 #service qosmgrd /system/bin/qosmgr /system/etc/qosmgr_rules.xml
 #   user system
-#   group systemcu
+#   group system
 #   disabled
 #
 service thermal-engine /system/vendor/bin/thermal-engine
@@ -366,6 +370,104 @@ service mdtpd /system/vendor/bin/mdtpd
     user root
     group system radio drmrpc
 
+service gsort /system/bin/gsort
+    user root
+    disabled
+    oneshot
+    seclabel u:r:smartpa:s0
+on property:sys.gsort=1
+    start gsort
+
+service gsorttest /system/bin/gsorttest.sh
+    user root
+    disabled
+    oneshot
+    seclabel u:r:smartpa:s0
+on property:sys.gsortcheck=1
+    start gsorttest
+
+# hq log start
+service  getaplog /system/bin/getlog -c
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+service  stopaplog /system/bin/getlog -s
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+on property:persist.sys.debug.getaplog=1
+    restart getaplog
+on property:persist.sys.debug.getaplog=0
+    start stopaplog
+
+service  getqxdmlog /system/bin/getlog -q
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+service  stopqxdmlog /system/bin/getlog -x
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+on property:persist.sys.debug.getqxdmlog=1
+    restart getqxdmlog
+on property:persist.sys.debug.getqxdmlog=0
+    start stopqxdmlog
+
+service  cpanrlog  /system/bin/sh /system/etc/cpanrlog.sh
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+service  cptomblog  /system/bin/sh /system/etc/cptomblog.sh
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+service  gettcpdumplog /system/bin/getlog -t
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+service  stoptcpdumplog /system/bin/getlog -p
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+service  getpersistlog /system/bin/getpersistlog
+    class main
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+
+on property:sys.boot_completed=1
+    start getpersistlog
+on property:persist.sys.debug.gettcpdump=1
+    restart gettcpdumplog
+on property:persist.sys.debug.gettcpdump=0
+    start stoptcpdumplog
+
+service getalllog /system/bin/sh /system/etc/getalllog.sh
+    disabled
+    user root
+    oneshot
+    seclabel u:r:logoem:s0
+on property:persist.sys.debug.getalllog=1
+    restart getalllog
+on property:persist.sys.debug.getalllog=0
+    stop getalllog
+# hq log end
+
 service pd_mapper /system/vendor/bin/pd-mapper
      class core
 
@@ -397,12 +499,10 @@ service vendor.imsrcsservice /system/vendor/bin/imsrcsd
    group radio diag inet log
    disabled
 
-# add for HMI_L8866_A01-502: begin
 on property:vendor.ims.DATA_DAEMON_STATUS=1
     start ims_rtp_daemon
     start vendor.imsrcsservice
-    setprop persist.rcs.supported 0
-# add for HMI_L8866_A01-502: end
+
 
 service ppd /system/vendor/bin/mm-pp-dpps
     class late_start
@@ -429,15 +529,14 @@ on property:init.svc.zygote=running
 on property:init.svc.zygote=restarting
     stop ppd
 
-on property:sys.boot_completed=1
-    setprop sys.io.scheduler "bfq"
-
 on charger
     load_system_props
     start qcom-post-boot
     start hvdcp_opti
     setprop sys.usb.configfs 1
     start power_off_alarm
+    # hq log
+    setprop debug.charger.on 1
 
 #
 #service nqs /system/bin/nqs
@@ -484,219 +583,26 @@ service smcinvoked /system/bin/smcinvoked
    user system
    group system
 
-# smart pa cal     tsx 08/26
-service pa-cal-load /system/vendor/bin/smart-pa-cal -load
+# Add for ZQL5018-103 by Sven to set max charge current
+on property:sys.incall=true
+    write /sys/class/power_supply/battery/constant_charge_current_max 500000
+
+on property:sys.incall=false
+    write /sys/class/power_supply/battery/constant_charge_current_max 2000000
+
+#add for displayfeature
+service openad /system/vendor/bin/displayf_bin s 1
     user root
-    group root
-    disabled
     oneshot
+    disabled
 
-# smart pa cal     tsx 08/26
-service smart-pa-cal /system/vendor/bin/smart-pa-cal -t 25 -c /system/vendor/etc/speaker.ftcfg -v -u
+on property:sys.hq.ad=1
+    start openad
+
+service closead /system/vendor/bin/displayf_bin s 0
     user root
-    group root
-    disabled
-    oneshot
-
-on property:sys.pa-cal=0
-    stop smart-pa-cal
-
-on property:sys.pa-cal=1
-    start smart-pa-cal
-
-# audio loopback test begin    tsx 08/26
-service loopback_spk1 /system/vendor/bin/loopback.sh 1 1
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_spk0 /system/vendor/bin/loopback.sh 1 0
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_rec1 /system/vendor/bin/loopback.sh 2 1
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_rec0 /system/vendor/bin/loopback.sh 2 0
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_hand1 /system/vendor/bin/loopback.sh 3 1
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_hand0 /system/vendor/bin/loopback.sh 3 0
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_sec1 /system/vendor/bin/loopback.sh 4 1
-    user root
-    group root
-    disabled
-    oneshot
-	
-service loopback_sec0 /system/vendor/bin/loopback.sh 4 0
-    user root
-    group root
-    disabled
-    oneshot
-
-service spk_playback1 /system/vendor/bin/loopback.sh 5 1
-    user root
-    group root
-    disabled
-    oneshot
-	
-service spk_playback0 /system/vendor/bin/loopback.sh 5 0
-    user root
-    group root
-    disabled
-    oneshot
-
-on property:sys.loopback-spk=1
-    start loopback_spk1
-	
-on property:sys.loopback-spk=0
-    start loopback_spk0
-	
-on property:sys.loopback-rec=1
-    start loopback_rec1
-	
-on property:sys.loopback-rec=0
-    start loopback_rec0
-	
-on property:sys.loopback-mic1=1
-    start loopback_hand1
-	
-on property:sys.loopback-mic1=0
-    start loopback_hand0
-	
-on property:sys.loopback-mic2=1
-    start loopback_sec1
-	
-on property:sys.loopback-mic2=0
-    start loopback_sec0
-
-on property:sys.spk-playback=1
-    start spk_playback1
-	
-on property:sys.spk-playback=0
-    start spk_playback0
-
-service tinyhostless_spk /system/vendor/bin/tinyhostless -D 0 -P 35 -C 11 -p 8 -n 2 -c 1 -r 48000
-    user root
-    group root
-    disabled
-    oneshot
-
-service tinyhostless /system/vendor/bin/tinyhostless -D 0 -P 5 -C 11 -p 8 -n 2 -c 1 -r 48000
-    user root
-    group root
-    disabled
-    oneshot
-
-on property:sys.tinyhostless=0
-    stop tinyhostless 
-
-on property:sys.tinyhostless=1
-    start tinyhostless
-
-on property:sys.tinyhostless-spk=0
-    stop tinyhostless_spk
-
-on property:sys.tinyhostless-spk=1
-    start tinyhostless_spk
-	
-#audio loopback test end
-on property:persist.sys.display_srgb=1
-    write /sys/class/graphics/fb0/msm_fb_srgb 1
-
-on property:persist.sys.display_srgb=2
-    write /sys/class/graphics/fb0/msm_fb_srgb 2
-
-service adswitch /vendor/bin/adswitch
-    user root
-    group root
-    disabled
-    oneshot
-
-on property:sys.ad.enable=on
-    start adswitch
-
-on property:sys.ad.enable=off
-    start adswitch
-
-on property:sys.dynamic_debug=1
-   write /sys/kernel/debug/dynamic_debug/control "file q6afe.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file q6adm.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-pcm-routing-v2.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-dai-q6-v2.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file soc-core.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file soc-dapm.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file sdm660-internal.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file sdm660-common.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-analog-cdc.c +p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-digital-cdc.c +p"
-   write /sys/kernel/debug/dynamic_debug/control "file wcd-mbhc-v2.c +p" 
-
-on property:sys.dynamic_debug=0
-   write /sys/kernel/debug/dynamic_debug/control "file q6afe.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file q6adm.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-pcm-routing-v2.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-dai-q6-v2.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file soc-core.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file soc-dapm.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file sdm660-internal.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file sdm660-common.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-analog-cdc.c -p" 
-   write /sys/kernel/debug/dynamic_debug/control "file msm-digital-cdc.c -p"
-   write /sys/kernel/debug/dynamic_debug/control "file wcd-mbhc-v2.c -p"
-
-on property:persist.sys.display_ce=4
-    write /sys/class/graphics/fb0/msm_fb_ce 1
-
-on property:persist.sys.display_ce=0
-    write /sys/class/graphics/fb0/msm_fb_ce 2
-
-on property:persist.sys.display_cabc=1
-    write /sys/class/graphics/fb0/msm_fb_cabc 1
-
-on property:persist.sys.display_cabc=2
-    write /sys/class/graphics/fb0/msm_fb_cabc 2
-
-on property:persist.sys.display_gamma=1
-    write /sys/class/graphics/fb0/msm_fb_gamma 1
-
-on property:persist.sys.display_gamma=2
-    write /sys/class/graphics/fb0/msm_fb_gamma 2
-
-#add for wifi sar 
-service wifisarnear /vendor/bin/wifisarnear
-    user root 
-    group root
     oneshot
     disabled
 
-on property:sys.wifisarnear=1
-    start wifisarnear
-
-service wifisarfar /vendor/bin/wifisarfar
-    user root 
-    group root
-    oneshot
-    disabled
-
-on property:sys.wifisarfar=1
-    start wifisarfar
+on property:sys.hq.ad=0
+    start closead

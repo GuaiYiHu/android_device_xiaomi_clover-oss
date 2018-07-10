@@ -242,6 +242,15 @@ case "$target" in
         case "$soc_hwplatform" in
             *)
                 setprop persist.graphics.vulkan.disable true
+                setprop ro.opengles.version 196608
+                ;;
+        esac
+        ;;
+    "msm8916")
+        case "$soc_hwplatform" in
+            *)
+                setprop persist.graphics.vulkan.disable true
+                setprop ro.opengles.version 196608
                 ;;
         esac
         ;;
@@ -278,10 +287,16 @@ case "$target" in
         esac
         ;;
     "msm8953")
-        cap_ver=`cat /sys/devices/soc/1d00000.qcom,vidc/capability_version` 2> /dev/null
-        if [ $cap_ver -eq 1 ]; then
-            setprop media.msm8953.version 1
-        fi
+        cap_ver = 1
+                if [ -e "/sys/devices/platform/soc/1d00000.qcom,vidc/capability_version" ]; then
+                    cap_ver=`cat /sys/devices/platform/soc/1d00000.qcom,vidc/capability_version` 2> /dev/null
+                else
+                    cap_ver=`cat /sys/devices/soc/1d00000.qcom,vidc/capability_version` 2> /dev/null
+                fi
+
+                if [ $cap_ver -eq 1 ]; then
+                    setprop media.msm8953.version 1
+                fi
         ;;
     "msm8952")
       case "$soc_hwid" in
@@ -309,32 +324,6 @@ case "$target" in
       esac
       ;;
 esac
-
-# In mpss AT version is greater than 3.1, need 
-# to use the new vendor-ril which supports L+L feature 
-# otherwise use the existing old one. 
-if [ -f /firmware/verinfo/ver_info.txt ]; then 
-  modem=`cat /firmware/verinfo/ver_info.txt | 
-  sed -n 's/^[^:]*modem[^:]*:[[:blank:]]*//p' | 
-  sed 's/.*AT.\(.*\)/\1/g' | cut -d \- -f 1` 
-  zygote=`getprop ro.zygote` 
-  case "$zygote" in 
-  "zygote64_32") 
-    if [ "$modem" \< "3.1" ]; then 
-      setprop vendor.rild.libpath "/vendor/lib64/libril-qc-qmi-1.so" 
-    else 
-      setprop vendor.rild.libpath "/vendor/lib64/libril-qc-hal-qmi.so" 
-    fi
-    ;; 
-  "zygote32") 
-    if [ "$modem" \< "3.1" ]; then 
-      setprop vendor.rild.libpath "/vendor/lib/libril-qc-qmi-1.so" 
-    else 
-      setprop vendor.rild.libpath "/vendor/lib/libril-qc-hal-qmi.so" 
-    fi
-    ;;
-   esac 
-fi
 
 if [ -f /firmware/verinfo/ver_info.txt ]; then
     # In mpss AT version is greater than 3.1, need
@@ -528,3 +517,17 @@ if [ -f /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies ]; then
     gpu_freq=`cat /sys/class/kgsl/kgsl-3d0/gpu_available_frequencies` 2> /dev/null
     setprop ro.gpu.available_frequencies "$gpu_freq"
 fi
+
+# set prop for fingerprint identification
+hw_id=`cat /sys/devices/platform/HardwareInfo/hw_id`
+hw_device=`echo $hw_id | sed -ne 's/^\([^_]*\)_\([^_]*\)_\([^_]*\).*/\3/p'`
+case "$hw_device" in
+    "D9" | "NULL" )
+        setprop persist.sys.fp.vendor none
+        setprop ro.board.variant d9
+        ;;
+    "D9P" )
+        setprop persist.sys.fp.vendor fpc
+        setprop ro.board.variant d9p
+        ;;
+esac
