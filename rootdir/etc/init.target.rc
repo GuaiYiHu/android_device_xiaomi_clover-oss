@@ -222,7 +222,6 @@ service vendor.ims_rtp_daemon /system/vendor/bin/ims_rtp_daemon
    class main
    user system
    group radio diag inet log
-   disabled
    writepid /dev/cpuset/system-background/tasks
 
 service vendor.imsrcsservice /system/vendor/bin/imsrcsd
@@ -230,9 +229,6 @@ service vendor.imsrcsservice /system/vendor/bin/imsrcsd
    user system
    group radio diag inet log
    writepid /dev/cpuset/system-background/tasks
-
-on property:vendor.ims.DATA_DAEMON_STATUS=1
-    start vendor.ims_rtp_daemon
 
 service vendor.ppd /system/vendor/bin/mm-pp-dpps
     class late_start
