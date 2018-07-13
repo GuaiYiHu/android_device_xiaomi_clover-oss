@@ -1,26 +1,25 @@
 Copyright 2018 - The Mokee Project
 
-The Redmi Note 5 (codenamed _"whyred"_) are high-end mid-range smartphones from Xiaomi.
+The MI PAD 4 (codenamed _"clover"_) are high-end mid-range tablet from Xiaomi.
 
-Xiaomi Redmi Note 5 was announced and released in March 2018.
+Xiaomi MI PAD 4 was announced and released in June 2018.
 
 ## Device specifications
 
-| Device       | Xiaomi Redmi Note 5                         |
+| Device       | Xiaomi MI PAD 4                         |
 | -----------: | :---------------------------------------------- |
-| SoC          | Qualcomm SDM660 Snapdragon 636                  |
-| CPU          | 8x Qualcomm® Kryo™ 260 up to 1.8GHz             |
-| GPU          | Adreno 509                                      |
-| Memory       | 4GB / 6GM RAM (LPDDR4X)                         |
+| SoC          | Qualcomm SDM660 Snapdragon 660                  |
+| CPU          | 8x Qualcomm® Kryo™ 260 up to 2.2GHz             |
+| GPU          | Adreno 512                                      |
+| Memory       | 3GB / 4GM RAM (LPDDR4X)                         |
 | Shipped Android version | 8.1.0                              |
 | Storage      | 64GB eMMC 5.1 flash storage                     |
-| Battery      | Non-removable Li-Po 4000 mAh                    |
-| Dimensions   | 158.6 x 75.4 x 8.05 mm                          |
-| Display      | 2160 x 1080 (18:9), 5.99 inch                   |
-| Rear camera 1 | 12MP, 1.25-micron pixels, f/2.2 Dual LED flash |
-| Rear camera 2 | 5MP, 1.12-micron pixels, f/2.0                |
-| Front camera | 20MP, 1-micron pixels, f/2.2 1080p 30 fps video, Selfie-light|
+| Battery      | Non-removable Li-Po 6000 mAh                    |
+| Dimensions   | 200.2 x 120.3 x 7.9 mm                          |
+| Display      | 1920 x 1200 (16:10), 8.0 inch                   |
+| Rear camera | 13MP, f/2.0 1080p 30 fps video|
+| Front camera | 5MP, f/2.0|
 
 ## Device picture
 
-![Xiaomi Redmi Note 5 Pro](https://www1-lw.xda-cdn.com/files/2018/02/Xiaomi-Redmi-Note-5-and-Redmi-Note-5-Pro-Forums-now-Open.png)
+![Xiaomi MI PAD 4](http://i8.mifile.cn/a1/pms_1529843020.73617168!560x560.jpg)

@@ -21,7 +21,7 @@
 # definition file).
 #
 
-DEVICE_PATH := device/xiaomi/whyred
+DEVICE_PATH := device/xiaomi/clover
 
 # Bootloader
 TARGET_BOOTLOADER_BOARD_NAME := sdm636
@@ -70,7 +70,7 @@ BOARD_ANT_WIRELESS_DEVICE := "qualcomm-uart"
 
 # Assert
 TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
-TARGET_OTA_ASSERT_DEVICE := whyred
+TARGET_OTA_ASSERT_DEVICE := clover
 
 # Audio
 BOARD_USES_ALSA_AUDIO := true
@@ -207,7 +207,7 @@ TARGET_USES_INTERACTION_BOOST := true
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/recovery.fstab
 
 # Releasetools
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_whyred
+TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_clover
 TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 
 # RIL
@@ -234,8 +234,8 @@ ifeq ($(WITH_TWRP),true)
 endif
 
 # Vendor init
-TARGET_INIT_VENDOR_LIB := libinit_whyred
-TARGET_RECOVERY_DEVICE_MODULES := libinit_whyred
+TARGET_INIT_VENDOR_LIB := libinit_clover
+TARGET_RECOVERY_DEVICE_MODULES := libinit_clover
 
 # Wifi
 BOARD_HAS_QCOM_WLAN := true
@@ -264,4 +264,4 @@ ifeq ($(HOST_OS),linux)
 endif
 
 # inherit from the proprietary version
--include vendor/xiaomi/whyred/BoardConfigVendor.mk
+-include vendor/xiaomi/clover/BoardConfigVendor.mk

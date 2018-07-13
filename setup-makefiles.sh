@@ -18,7 +18,7 @@
 
 set -e
 
-DEVICE=whyred
+DEVICE=clover
 VENDOR=xiaomi
 
 INITIAL_COPYRIGHT_YEAR=2018

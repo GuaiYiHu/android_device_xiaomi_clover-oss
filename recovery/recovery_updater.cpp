@@ -187,6 +187,6 @@ Value * VerifyTrustZoneFn(const char *name, State *state,
     return StringValue(strdup(ret ? "1" : "0"));
 }
 
-void Register_librecovery_updater_whyred() {
-    RegisterFunction("whyred.verify_trustzone", VerifyTrustZoneFn);
+void Register_librecovery_updater_clover() {
+    RegisterFunction("clover.verify_trustzone", VerifyTrustZoneFn);
 }
