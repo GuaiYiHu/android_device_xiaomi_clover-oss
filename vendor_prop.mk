@@ -71,6 +71,9 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.af.client_heap_size_kbyte=7168
 
+PRODUCT_PROPERTY_OVERRIDES += \
+    persist.vendor.audio.hw.binder.size_kbyte=1024
+
 # Debug Options
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.dbg.ims_volte_enable=1 \
