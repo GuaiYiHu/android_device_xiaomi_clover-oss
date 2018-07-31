@@ -17,7 +17,9 @@ DEVICE_PROVISIONED=1
 #change by shixiaoyou, 2018/04/02
 ro.telephony.default_network=22
 
+#change by lizhihai, 2018/07/05
 debug.sf.enable_hwc_vds=1
+debug.vds.allow_hwc=0
 debug.sf.hw=1
 debug.sf.latch_unsignaled=1
 debug.gralloc.enable_fb_ubwc=1
@@ -79,6 +81,7 @@ ro.qualcomm.cabl=0
 
 # System property for color temperature
 ro.colorpick_adjust=true
+ro.df.effect.conflict=1
 
 #
 # System props for telephony
