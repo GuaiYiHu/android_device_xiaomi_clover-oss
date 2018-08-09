@@ -23,6 +23,7 @@ $(call inherit-product, device/xiaomi/clover/device.mk)
 
 # Inherit some common Mokee stuff.
 $(call inherit-product, vendor/mk/config/common_full_tablet_wifionly.mk)
+$(call inherit-product, vendor/mk/config/telephony.mk)
 
 PRODUCT_NAME := mk_clover
 PRODUCT_BRAND := Xiaomi
