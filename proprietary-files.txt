@@ -1135,6 +1135,8 @@ lib/lib-imsvtutils.so
 lib64/lib-imsvideocodec.so
 lib/lib-imsvideocodec.so
 lib64/lib-imsvt.so
+vendor/lib64/lib-siputility.so
+vendor/lib/lib-siputility.so
 vendor/lib64/lib-uceservice.so
 vendor/lib/lib-uceservice.so
 vendor/bin/imsqmidaemon
