@@ -441,78 +441,73 @@ on property:persist.debug.trace=1
     mkdir /data/core 0777 root root
     write /proc/sys/kernel/core_pattern "/data/core/%E.%p.%e"
 
-service qcom-c_core-sh  /vendor/bin/init.qcom.class_core.sh
-    class core
-    user root
-    oneshot
-
-service qcom-c_main-sh /vendor/bin/init.class_main.sh
+service vendor.qcom-c_main-sh /vendor/bin/init.class_main.sh
     class main
     user root
     oneshot
 
 on property:vold.decrypt=trigger_restart_framework
-    start qcom-c_main-sh
+    start vendor.qcom-c_main-sh
 
 on property:persist.env.fastdorm.enabled=true
     setprop persist.radio.data_no_toggle 1
 
-service cnd /system/vendor/bin/cnd
+service vendor.cnd /system/vendor/bin/cnd
     class main
     user system
     group system wifi inet radio wakelock net_admin
 
-service dpmQmiMgr /system/vendor/bin/dpmQmiMgr
+service vendor.dpmQmiMgr /system/vendor/bin/dpmQmiMgr
     class main
     user system
     group radio system
 
-service irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
+service vendor.irsc_util /vendor/bin/irsc_util "/vendor/etc/sec_config"
     class core
     user root
     oneshot
 
-service rmt_storage /vendor/bin/rmt_storage
+service vendor.rmt_storage /vendor/bin/rmt_storage
     class core
     user root
     shutdown critical
     ioprio rt 0
 
-service tftp_server /vendor/bin/tftp_server
+service vendor.tftp_server /vendor/bin/tftp_server
    class core
    user root
 
 # QMUX must be in multiple groups to support external process connections
-service qmuxd /system/vendor/bin/qmuxd
+service vendor.qmuxd /system/vendor/bin/qmuxd
     class main
     user root
     group radio audio bluetooth gps nfc diag
     disabled
 
-service netmgrd /system/vendor/bin/netmgrd
+service vendor.netmgrd /system/vendor/bin/netmgrd
     class main
     disabled
 
-service ipacm /system/vendor/bin/ipacm
+service vendor.ipacm /system/vendor/bin/ipacm
     class main
     user radio
     group radio inet
     disabled
 
-service qti /system/vendor/bin/qti
+service vendor.qti /system/vendor/bin/qti
     class main
     user radio
     group radio oem_2901 diag usb net_admin
     disabled
 
-service sensors /vendor/bin/sensors.qcom
+service vendor.sensors /vendor/bin/sensors.qcom
     class core
     user root
     group root
 
 on property:ro.use_data_netmgrd=false
     # netmgr not supported on specific target
-    stop netmgrd
+    stop vendor.netmgrd
 
 # Adjust socket buffer to enlarge TCP receive window for high bandwidth
 # but only if ro.data.large_tcp_window_size property is set.
@@ -536,55 +531,48 @@ service wpa_supplicant /vendor/bin/hw/wpa_supplicant \
     disabled
     oneshot
 
-service cnss-daemon /system/vendor/bin/cnss-daemon -n -l
+service vendor.cnss-daemon /system/vendor/bin/cnss-daemon -n -l
     class late_start
     user system
     group system inet net_admin wifi
     capabilities NET_ADMIN
 
 on property:sys.powerctl=*
-    stop cnss-daemon
+    stop vendor.cnss-daemon
 
-service loc_launcher /system/vendor/bin/loc_launcher
+service vendor.loc_launcher /system/vendor/bin/loc_launcher
     #loc_launcher will start as root and set its uid to gps
     class late_start
     group gps inet diag wifi
 
-service qcom-sh /vendor/bin/init.qcom.sh
+service vendor.qcom-sh /vendor/bin/init.qcom.sh
     class late_start
     user root
     oneshot
 
-service qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
+service vendor.qcom-post-boot /vendor/bin/init.qcom.post_boot.sh
     class late_start
     user root
     disabled
     oneshot
 
 on property:sys.boot_completed=1
-    start qcom-post-boot
+    start vendor.qcom-post-boot
 
-service atfwd /vendor/bin/ATFWD-daemon
+service vendor.atfwd /vendor/bin/ATFWD-daemon
     class late_start
     user system
     group system radio
     disabled
 
 on property:persist.radio.atfwd.start=true
-    start atfwd
-
-service hostapd_fst /vendor/bin/hostapd -dd -g /data/vendor/wifi/hostapd/global /data/misc/wifi/hostapd.conf
-    class late_start
-    user wifi
-    group wifi inet keystore net_admin net_raw
-    oneshot
-    disabled
+    start vendor.atfwd
 
 on property:ro.data.large_tcp_window_size=true
     # Adjust socket buffer to enlarge TCP receive window for high bandwidth (e.g. DO-RevB)
     write /proc/sys/net/ipv4/tcp_adv_win_scale  2
 
-service ril-daemon2 /vendor/bin/hw/rild -c 2
+service vendor.ril-daemon2 /vendor/bin/hw/rild -c 2
     class main
     socket rild2 stream 660 root radio
     socket rild-debug2 stream 660 radio system
@@ -628,7 +616,7 @@ service vendor.msm_irqbl_sdm630 /vendor/bin/msm_irqbalance -f /system/vendor/etc
 
 on charger
     setprop persist.sys.usb.config mass_storage
-    start qcom-post-boot
+    start vendor.qcom-post-boot
 
 on property:init.svc.surfaceflinger=restarting
     stop hwcomposer-2-1
