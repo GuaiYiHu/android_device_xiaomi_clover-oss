@@ -50,7 +50,7 @@ esac
 
 case "$baseband" in
     "msm" | "csfb" | "svlte2a" | "mdm" | "mdm2" | "sglte" | "sglte2" | "dsda2" | "unknown" | "dsda3" | "sdm" | "sdx")
-    start ipacm
+    start vendor.ipacm
     case "$baseband" in
         "svlte2a" | "csfb")
           start qmiproxy
@@ -69,21 +69,21 @@ case "$baseband" in
     multisim=`getprop persist.radio.multisim.config`
 
     if [ "$multisim" = "dsds" ] || [ "$multisim" = "dsda" ]; then
-        start ril-daemon2
+        start vendor.ril-daemon2
     elif [ "$multisim" = "tsts" ]; then
-        start ril-daemon2
+        start vendor.ril-daemon2
     fi
 
     case "$datamode" in
         "tethered")
-            start qti
+            start vendor.qti
             ;;
         "concurrent")
-            start qti
-            start netmgrd
+            start vendor.qti
+            start vendor.netmgrd
             ;;
         *)
-            start netmgrd
+            start vendor.netmgrd
             ;;
     esac
 esac
