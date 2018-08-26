@@ -63,10 +63,6 @@ PRODUCT_PROPERTY_OVERRIDES += \
     sys.fp.miui.token=0 \
     persist.camera.stats.test=5
 
-# Security patch level
-PRODUCT_PROPERTY_OVERRIDES += \
-    ro.vendor.build.security_patch=2018-10-01
-
 # Maintainer
 PRODUCT_PROPERTY_OVERRIDES += \
     ro.mk.maintainer=guaiyihu
