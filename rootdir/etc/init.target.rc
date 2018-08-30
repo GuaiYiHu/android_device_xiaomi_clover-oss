@@ -127,6 +127,10 @@ on boot
     chmod 0660 /sys/devices/platform/soc/soc:fpc1020/hw_reset
     chown system system /sys/devices/soc/soc:fpc1020/wakeup_enable
     chmod 0660 /sys/devices/soc/soc:fpc1020/wakeup_enable
+    #MIUI Patch modified for ZQL6019-4 by penghoubing@huaqin.com
+    chown system system /sys/devices/soc/soc:fpc1020/fingerdown_wait
+    chmod 0660 /sys/devices/soc/soc:fpc1020/fingerdown_wait
+
     # wendell-20180423 end
     start getpersistlog
     #Load WLAN driver
