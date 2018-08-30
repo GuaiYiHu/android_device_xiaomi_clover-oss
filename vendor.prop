@@ -64,7 +64,7 @@ sys.fp.miui.token=0
 persist.camera.stats.test=5
 
 # Security patch level
-ro.vendor.build.security_patch=2018-07-01
+ro.vendor.build.security_patch=2018-08-01
 
 # Maintainer
 ro.mk.maintainer=guaiyihu
