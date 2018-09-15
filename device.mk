@@ -220,6 +220,7 @@ PRODUCT_PACKAGES += \
     liblocation_api \
     libloc_core \
     libloc_pla \
+    libsensorndkbridge \
     libvehiclenetwork-native
 
 # Health
