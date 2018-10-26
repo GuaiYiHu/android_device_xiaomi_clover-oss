@@ -80,10 +80,6 @@ PRODUCT_AAPT_PREF_CONFIG := xxhdpi
 TARGET_SCREEN_HEIGHT := 1920
 TARGET_SCREEN_WIDTH := 1200
 
-PRODUCT_COPY_FILES += $(LOCAL_PATH)/configs/whitelistedapps.xml:$(TARGET_COPY_OUT_VENDOR)/etc/whitelistedapps.xml \
-                      $(LOCAL_PATH)/configs/gamedwhitelist.xml:$(TARGET_COPY_OUT_VENDOR)/etc/gamedwhitelist.xml \
-                      $(LOCAL_PATH)/configs/appboosts.xml:$(TARGET_COPY_OUT_VENDOR)/etc/appboosts.xml
-
 # Audio
 PRODUCT_PACKAGES += \
     android.hardware.audio@4.0-impl:32 \
