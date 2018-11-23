@@ -153,7 +153,7 @@ SF_VSYNC_EVENT_PHASE_OFFSET_NS := 6000000
 VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
 
 # DT2W
-TARGET_TAP_TO_WAKE_NODE := "/sys/class/input/input2/wake_gesture"
+TARGET_TAP_TO_WAKE_NODE := "/sys/devices/soc/c177000.i2c/i2c-3/3-0038/fts_gesture_mode"
 
 # EXFAT
 TARGET_EXFAT_DRIVER := exfat
