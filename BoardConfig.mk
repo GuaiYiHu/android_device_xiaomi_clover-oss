@@ -57,10 +57,9 @@ BOARD_KERNEL_IMAGE_NAME := Image.gz-dtb
 TARGET_KERNEL_ARCH := arm64
 TARGET_KERNEL_CROSS_COMPILE_PREFIX := aarch64-linux-android-
 TARGET_KERNEL_HEADER_ARCH := arm64
-TARGET_KERNEL_SOURCE := kernel/xiaomi/whyred
-TARGET_KERNEL_CONFIG := whyred-perf_defconfig
+TARGET_KERNEL_SOURCE := kernel/xiaomi/clover
+TARGET_KERNEL_CONFIG := clover-perf_defconfig
 TARGET_KERNEL_CLANG_COMPILE := true
-TARGET_PREBUILT_KERNEL := $(DEVICE_PATH)/prebuilt/Image.gz-dtb
 
 # QCOM
 BOARD_USES_QCOM_HARDWARE := true
