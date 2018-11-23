@@ -33,6 +33,8 @@
 #include <android-base/file.h>
 #include <android-base/properties.h>
 #include <android-base/strings.h>
+#define _REALLY_INCLUDE_SYS__SYSTEM_PROPERTIES_H_
+#include <sys/_system_properties.h>
 
 #include "property_service.h"
 #include "vendor_init.h"
@@ -41,6 +43,24 @@ using android::base::GetProperty;
 using android::base::ReadFileToString;
 using android::base::Trim;
 using android::init::property_set;
+
+void property_override(char const prop[], char const value[])
+{
+    prop_info *pi;
+
+    pi = (prop_info*) __system_property_find(prop);
+    if (pi)
+        __system_property_update(pi, value, strlen(value));
+    else
+        __system_property_add(prop, strlen(prop), value, strlen(value));
+}
+
+void property_override_dual(char const system_prop[],
+        char const vendor_prop[], char const value[])
+{
+    property_override(system_prop, value);
+    property_override(vendor_prop, value);
+}
 
 static void init_alarm_boot_properties()
 {
@@ -79,10 +99,20 @@ static void init_alarm_boot_properties()
 void vendor_load_properties()
 {
     std::string platform;
+    std::string hw_device;
+
+    char const *hw_id_file = "/sys/devices/platform/HardwareInfo/hw_id";
 
     platform = GetProperty("ro.board.platform", "");
     if (platform != ANDROID_TARGET)
         return;
+
+    ReadFileToString(hw_id_file, &hw_device);
+    if (hw_device.find("D9P") != std::string::npos) {
+        property_override_dual("ro.product.model", "ro.vendor.product.model", "MI PAD 4 PLUS");
+    } else {
+        property_override_dual("ro.product.model", "ro.vendor.product.model", "MI PAD 4");
+    }
 
     init_alarm_boot_properties();
 }
