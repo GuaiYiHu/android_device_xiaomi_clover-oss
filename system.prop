@@ -1,8 +1,8 @@
 ro.product.brand=xiaomi
-ro.product.name=whyred
-ro.product.device=whyred
-ro.product.mod_device=whyred_global
-ro.build.product=whyred
+ro.product.name=clover
+ro.product.device=clover
+ro.product.mod_device=clover
+ro.build.product=clover
 ro.treble.enabled=true
 sys.usb.controller=a800000.dwc3
 sys.usb.rndis.func.name=rndis_bam
