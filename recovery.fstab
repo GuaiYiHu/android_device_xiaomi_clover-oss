@@ -23,6 +23,7 @@
 /efs2             emmc     /dev/block/bootdevice/by-name/modemst2     flags=backup=1;subpartitionof=/efs1
 /efsc             emmc     /dev/block/bootdevice/by-name/fsc          flags=backup=1;subpartitionof=/efs1
 /efsg             emmc     /dev/block/bootdevice/by-name/fsg          flags=backup=1;subpartitionof=/efs1
+/persist          ext4     /dev/block/bootdevice/by-name/persist       flags=display="Persist"
 
 
 /usb-otg          vfat     /dev/block/sda1  /dev/block/sda            flags=display="usb-otg";storage;wipeingui;removable;fsflags="utf8"
