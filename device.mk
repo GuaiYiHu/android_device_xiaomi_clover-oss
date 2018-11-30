@@ -319,10 +319,6 @@ PRODUCT_COPY_FILES += \
 PRODUCT_PACKAGES += \
     libjson
 
-# XiaomiParts
-PRODUCT_PACKAGES += \
-    XiaomiParts
-
 # Ramdisk
 PRODUCT_PACKAGES += \
     init.class_main.sh \
