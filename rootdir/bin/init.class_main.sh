@@ -50,7 +50,6 @@ esac
 
 case "$baseband" in
     "msm" | "csfb" | "svlte2a" | "mdm" | "mdm2" | "sglte" | "sglte2" | "dsda2" | "unknown" | "dsda3" | "sdm" | "sdx")
-    start ipacm-diag
     start ipacm
     case "$baseband" in
         "svlte2a" | "csfb")
@@ -73,18 +72,15 @@ case "$baseband" in
         start ril-daemon2
     elif [ "$multisim" = "tsts" ]; then
         start ril-daemon2
-        start ril-daemon3
     fi
 
     case "$datamode" in
         "tethered")
             start qti
-            start port-bridge
             ;;
         "concurrent")
             start qti
             start netmgrd
-            start port-bridge
             ;;
         *)
             start netmgrd
