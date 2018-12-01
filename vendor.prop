@@ -64,6 +64,18 @@ sys.fp.miui.token=0
 persist.camera.stats.test=5
 persist.camera.HAL3.enabled=1
 
+# Debug Options
+persist.dbg.ims_volte_enable=1
+persist.dbg.volte_avail_ovr=1
+persist.dbg.vt_avail_ovr=1
+persist.dbg.wfc_avail_ovr=1
+
+# Radio Options
+persist.vendor.radio.rat_on=combine
+persist.vendor.radio.data_ltd_sys_ind=1
+persist.vendor.radio.data_con_rprt=1
+persist.radio.calls.on.ims=1
+
 # Security patch level
 ro.vendor.build.security_patch=2018-10-01
 
