@@ -354,7 +354,8 @@ PRODUCT_PACKAGES += \
 
 PRODUCT_PACKAGES += \
     rild \
-    CarrierConfig
+    CarrierConfig \
+    Dialer
 
 # Seccomp
 PRODUCT_COPY_FILES += \
