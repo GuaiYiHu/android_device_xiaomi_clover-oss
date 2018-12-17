@@ -267,6 +267,11 @@ service hvdcp_opti /system/vendor/bin/hvdcp_opti
      user root
      group system wakelock
 
+service macaddress_setup-sh /vendor/bin/init.macaddress_setup.sh
+    class main
+    user root
+    oneshot
+
 # Add for ZQL5018-103 by Sven to set max charge current
 on property:sys.incall=true
     write /sys/class/power_supply/battery/constant_charge_current_max 500000
