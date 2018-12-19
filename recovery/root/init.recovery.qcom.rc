@@ -12,7 +12,7 @@ on fs
     symlink /dev/block/platform/soc/${ro.boot.bootdevice} /dev/block/bootdevice
     install_keyring
     mount vfat /dev/block/bootdevice/by-name/modem /firmware ro shortname=lower uid=1000 gid=1000 dmask=227 fmask=337
-    setprop crypto.ready 1
+    start prepdecrypt
 
 # separate copy needed to use /sbin/linker64 instead of /system/bin/linker64
 service sbinqseecomd /sbin/qseecomd
@@ -54,6 +54,13 @@ service gatekeeper-1-0 /sbin/android.hardware.gatekeeper@1.0-service-qti
     seclabel u:r:recovery:s0
 
 service keymaster-3-0 /sbin/android.hardware.keymaster@3.0-service-qti
+    user root
+    group root
+    disabled
+    seclabel u:r:recovery:s0
+
+service prepdecrypt /sbin/prepdecrypt.sh
+    oneshot
     user root
     group root
     disabled
