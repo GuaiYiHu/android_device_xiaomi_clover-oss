@@ -22,7 +22,7 @@ debug.sf.enable_hwc_vds=1
 debug.vds.allow_hwc=0
 debug.sf.hw=1
 debug.sf.latch_unsignaled=1
-debug.gralloc.enable_fb_ubwc=1
+vendor.gralloc.enable_fb_ubwc=1
 dalvik.vm.heapsize=36m
 dev.pm.dyn_samplingrate=1
 persist.demo.hdmirotationlock=false
@@ -179,7 +179,7 @@ persist.backup.ntpServer="0.pool.ntp.org"
 persist.vendor.overlay.izat.optin=rro
 
 #Disable Skip Validate
-sdm.debug.disable_skip_validate=1
+vendor.display.disable_skip_validate=1
 
 #Ultra sound support
 audio.chk.cal.us=0
