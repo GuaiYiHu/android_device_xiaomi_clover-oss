@@ -45,6 +45,8 @@ TARGET_NO_BOOTLOADER := true
 
 # Crypto
 TARGET_HW_DISK_ENCRYPTION := true
+PLATFORM_SECURITY_PATCH := 2025-12-31
+PLATFORM_VERSION := 9.0.0
 
 # Kernel
 BOARD_KERNEL_CMDLINE := console=ttyMSM0,115200,n8 androidboot.console=ttyMSM0 earlycon=msm_serial_dm,0xc170000
