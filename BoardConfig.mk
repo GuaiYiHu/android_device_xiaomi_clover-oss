@@ -156,7 +156,7 @@ VSYNC_EVENT_PHASE_OFFSET_NS := 2000000
 TARGET_ENABLE_MEDIADRM_64 := true
 
 # DT2W
-TARGET_TAP_TO_WAKE_NODE := "/sys/devices/soc/c177000.i2c/i2c-3/3-0038/fts_gesture_mode"
+TARGET_TAP_TO_WAKE_NODE := "/proc/touchscreen/enable_dt2w"
 
 # EXFAT
 TARGET_EXFAT_DRIVER := sdfat
