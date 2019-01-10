@@ -75,6 +75,10 @@ PRODUCT_PROPERTY_OVERRIDES += \
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.vendor.audio.hw.binder.size_kbyte=1024
 
+# HAL1 apps list
+PRODUCT_PROPERTY_OVERRIDES += \
+    vendor.camera.hal1.packagelist=com.whatsapp,com.intsig.camscanner
+
 # Debug Options
 PRODUCT_PROPERTY_OVERRIDES += \
     persist.dbg.ims_volte_enable=1 \
