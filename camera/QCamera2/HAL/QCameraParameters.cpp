@@ -48,7 +48,9 @@
 #include "QCameraParameters.h"
 #include "QCameraTrace.h"
 
+#ifdef ENABLE_QC_BOKEH
 #include "dualcameraddm_wrapper.h"
+#endif //ENABLE_QC_BOKEH
 
 extern "C" {
 #include "mm_camera_dbg.h"
@@ -17135,7 +17137,12 @@ bool QCameraParameters::needAnalysisStream()
  *==========================================================================*/
 void QCameraParameters::getDepthMapSize(int &width, int &height)
 {
+#ifdef ENABLE_QC_BOKEH
     qrcp::getDepthMapSize(CAM_BOKEH_TELE_WIDTH, CAM_BOKEH_TELE_HEIGHT, width, height);
+#else
+    (void)width;
+    (void)height;
+#endif //ENABLE_QC_BOKEH
 }
 
 void QCameraParameters::setBokehSnaphot(bool enable)
