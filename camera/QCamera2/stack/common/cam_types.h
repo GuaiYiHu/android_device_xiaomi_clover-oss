@@ -1354,6 +1354,7 @@ typedef struct {
     cam_dimension_t fd_frame_dim;              /* frame dims on which fd is applied */
     uint8_t update_flag;                       /* flag to inform whether HAL needs to send cb
                                                 * to app or not */
+    volatile char xiaomi_reversed[160];
 } cam_face_detection_data_t;
 
 // definition of composite face detection data
@@ -1663,6 +1664,7 @@ typedef struct {
     int32_t est_snap_iso_value;
     uint32_t est_snap_luma;
     uint32_t est_snap_target;
+    volatile char xiaomi_reversed[20];
 } cam_3a_params_t;
 
 typedef struct {
@@ -2488,6 +2490,13 @@ typedef enum {
     /* Enable/Disable AF fine scan */
     CAM_INTF_PARM_SKIP_FINE_SCAN,
     CAM_INTF_PARM_BOKEH_MODE,
+    XIAOMI_01,
+    XIAOMI_02,
+    XIAOMI_03,
+    XIAOMI_04,
+    XIAOMI_05,
+    XIAOMI_06,
+    XIAOMI_07,
     CAM_INTF_PARM_MAX
 } cam_intf_parm_type_t;
 

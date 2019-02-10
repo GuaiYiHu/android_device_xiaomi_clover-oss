@@ -1185,6 +1185,12 @@ typedef struct {
     INCLUDE(CAM_INTF_META_RTB_DATA,                     cam_rtb_msg_type_t,          1);
     INCLUDE(CAM_INTF_META_DC_CAPTURE,                   uint8_t,                     1);
     INCLUDE(CAM_INTF_PARM_BOKEH_MODE,                   uint8_t,                     1);
+    INCLUDE(XIAOMI_01,                                  uint32_t,                    1);
+    INCLUDE(XIAOMI_02,                                  uint32_t,                    1);
+    INCLUDE(XIAOMI_03,                                  uint32_t,                    1);
+    INCLUDE(XIAOMI_04,                                  uint32_t,                    1);
+    INCLUDE(XIAOMI_05,                                  uint32_t,                    1);
+    INCLUDE(XIAOMI_06,                                  uint32_t,                    1);
 } metadata_data_t;
 
 /* Update clear_metadata_buffer() function when a new is_xxx_valid is added to
