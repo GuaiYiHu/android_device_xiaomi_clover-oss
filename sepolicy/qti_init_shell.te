@@ -1,3 +1,2 @@
 #============= qti_init_shell ==============
 allow qti_init_shell sysfs_cpu_boost:file write;
-allow qti_init_shell sysfs_lowmemorykiller:dir write;
