@@ -77,7 +77,7 @@ PRODUCT_PROPERTY_OVERRIDES += \
 
 # HAL1 apps list
 PRODUCT_PROPERTY_OVERRIDES += \
-    vendor.camera.hal1.packagelist=com.whatsapp,com.intsig.camscanner
+    vendor.camera.hal1.packagelist=com.whatsapp,com.intsig.camscanner,com.instagram.android
 
 # Debug Options
 PRODUCT_PROPERTY_OVERRIDES += \
