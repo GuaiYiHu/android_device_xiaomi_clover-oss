@@ -39,7 +39,6 @@ vendor_rild_status=`getprop init.svc.vendor.ril-daemon`
 case "$baseband" in
     "apq" | "sda" | "qcs" )
     setprop ro.radio.noril true
-    start vendor.ipacm
     if [ -n "$rild_status" ] || [ -n "$vendor_rild_status" ]; then
       stop ril-daemon
       stop vendor.ril-daemon
@@ -55,7 +54,6 @@ case "$baseband" in
     if [[ -z "$rild_status" || "$rild_status" = "stopped" ]] && [[ -z "$vendor_rild_status" || "$vendor_rild_status" = "stopped" ]]; then
       start vendor.qcrild
     fi
-    start vendor.ipacm
 
     multisim=`getprop persist.radio.multisim.config`
 
