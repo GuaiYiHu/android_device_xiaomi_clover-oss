@@ -71,7 +71,6 @@ TARGET_USE_SDCLANG := true
 BOARD_ANT_WIRELESS_DEVICE := "qualcomm-hidl"
 
 # Assert
-TARGET_BOARD_INFO_FILE := $(DEVICE_PATH)/board-info.txt
 TARGET_OTA_ASSERT_DEVICE := clover
 
 # Audio
@@ -206,10 +205,6 @@ TARGET_USES_INTERACTION_BOOST := true
 
 # Recovery
 TARGET_RECOVERY_FSTAB := $(DEVICE_PATH)/rootdir/etc/recovery.fstab
-
-# Releasetools
-TARGET_RECOVERY_UPDATER_LIBS := librecovery_updater_clover
-TARGET_RELEASETOOLS_EXTENSIONS := $(DEVICE_PATH)
 
 # RIL
 ENABLE_VENDOR_RIL_SERVICE := true
