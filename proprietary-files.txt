@@ -1001,7 +1001,7 @@ vendor/lib64/vendor.qti.hardware.radio.am@1.0.so|89d5bfcc5772786ef5b09dd7a0702fb
 vendor/radio/qcril_database/qcril.db|ced4370ad96adba7e0f8c03018a3d188cb8e4ec4
 
 # Radio - IMS - from MI 8 Lite platina-user 9 PKQ1.181007.001 8.12.13 release-keys
--priv-app/ims/ims.apk|e42e8f26feb0ef7cd3effd4cedfdd5ba4641dd6a
+-priv-app/ims/ims.apk|e1f80f6daa4c8cef514bc7365aa35c7799fc6ecb
 -app/imssettings/imssettings.apk:vendor/app/imssettings/imssettings.apk|20d9b2c3f5939d4bfa7c03b5383d0cf03dbbc39e
 etc/permissions/com.qualcomm.qti.imscmservice.xml|db25ef24f1937366d58a53b4f4b8923bc9e98d2d
 etc/permissions/com.qualcomm.qti.imscmservice-V2.0-java.xml|8d25bd7b79baf266950eb484c1a28817f891aec2
