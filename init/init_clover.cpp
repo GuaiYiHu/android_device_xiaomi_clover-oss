@@ -61,14 +61,9 @@ void property_override_dual(char const system_prop[],
 
 void vendor_load_properties()
 {
-    std::string platform;
     std::string hw_device;
 
     char const *hw_id_file = "/sys/devices/platform/HardwareInfo/hw_id";
-
-    platform = GetProperty("ro.board.platform", "");
-    if (platform != ANDROID_TARGET)
-        return;
 
     ReadFileToString(hw_id_file, &hw_device);
     if (hw_device.find("D9P") != std::string::npos) {
