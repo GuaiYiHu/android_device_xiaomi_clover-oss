@@ -18,4 +18,3 @@
 /dev/block/bootdevice/by-name/cache      /cache             ext4   nosuid,nodev,noatime,barrier=1                           wait
 /dev/block/bootdevice/by-name/cache      /cache                 f2fs   nosuid,nodev,noatime,inline_xattr,flush_merge,data_flush   wait
 /dev/block/bootdevice/by-name/persist    /mnt/vendor/persist           ext4   nosuid,nodev,noatime,barrier=1                   wait,check,formattable
-/mnt/vendor/persist                          /persist           none    bind                                                        wait
