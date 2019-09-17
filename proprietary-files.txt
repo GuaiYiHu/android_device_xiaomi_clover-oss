@@ -1059,7 +1059,7 @@ vendor/lib64/vendor.qti.ims.callinfo@1.0.so|a6924fdc270404b4a0a5a86a414159fd2886
 vendor/lib64/vendor.qti.ims.rcsconfig@1.0.so|4cb6683a36ad11b18632fe99d7031e6a3c9a1b9b
 
 # Sensors
-vendor/bin/sensors.qcom
+vendor/bin/sensors.qti|3d6881f1210907aaf53dcc35b8afb55945c4af69
 vendor/etc/sensors/sensor_def_qcomdev.conf
 vendor/lib/hw/activity_recognition.sdm660.so
 vendor/lib/libsensor_reg.so

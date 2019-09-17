@@ -492,7 +492,7 @@ service vendor.dataqti /system/vendor/bin/qti
     disabled
     writepid /dev/cpuset/system-background/tasks
 
-service vendor.sensors /vendor/bin/sensors.qcom
+service vendor.sensors /vendor/bin/sensors.qti
     class core
     user root
     group root
