@@ -293,6 +293,18 @@ service vendor.macaddress_setup-sh /vendor/bin/init.macaddress_setup.sh
     user root
     oneshot
 
+service vendor.folio_daemon /vendor/bin/folio_daemon
+    class late_start
+    user system
+    group system uhid
+    disabled
+
+on property:init.svc.zygote=running
+    start vendor.folio_daemon
+
+on property:init.svc.zygote=stopped
+    stop vendor.folio_daemon
+
 # Add for ZQL5018-103 by Sven to set max charge current
 on property:sys.incall=true
     write /sys/class/power_supply/battery/constant_charge_current_max 500000
